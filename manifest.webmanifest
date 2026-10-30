@@ -1,0 +1,25 @@
+{
+  "id": "/",
+  "name": "Prompt Diya Arcade",
+  "short_name": "PD Arcade",
+  "description": "12 free HTML5 games: Ludo, 2048, Sudoku, Metro Dash, Snake, Racing and more. Play instantly on phone or PC.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0c0720",
+  "theme_color": "#1a1040",
+  "lang": "en",
+  "categories": ["games", "entertainment"],
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Ludo Star", "short_name": "Ludo", "url": "/ludo/", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }] },
+    { "name": "2048 Pro", "short_name": "2048", "url": "/2048/", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }] },
+    { "name": "Sudoku Pro", "short_name": "Sudoku", "url": "/sudoku/", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }] },
+    { "name": "Metro Dash", "short_name": "Metro Dash", "url": "/runner/", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }] }
+  ]
+}
