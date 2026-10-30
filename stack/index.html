@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#1a1030">
+<meta name="description" content="Stack Tower – a one-tap block stacking game. Drop blocks, slice the overhang, chain perfect drops and build the tallest tower.">
+<title>Stack Tower – Prompt Diya Arcade</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden;background:#140c26;color:#f3eaff;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+#game{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:pointer}
+.hud{position:fixed;top:0;left:0;right:0;pointer-events:none;display:flex;flex-direction:column;align-items:center;padding-top:max(14px,env(safe-area-inset-top));z-index:5}
+#score{font-size:clamp(44px,11vw,76px);font-weight:800;line-height:1;text-shadow:0 4px 24px rgba(0,0,0,.45);letter-spacing:-1px}
+#bestHud{font-size:13px;opacity:.7;margin-top:4px;font-weight:600;letter-spacing:.5px}
+.ctrl{position:fixed;top:max(10px,env(safe-area-inset-top));right:10px;display:flex;gap:8px;z-index:6}
+.ctrl button{width:40px;height:40px;border-radius:12px;border:1px solid rgba(255,255,255,.15);background:rgba(30,18,60,.55);color:#f3eaff;font-size:17px;cursor:pointer;backdrop-filter:blur(6px)}
+.ctrl button:active{transform:scale(.94)}
+.ov{position:fixed;inset:0;z-index:20;display:none;flex-direction:column;align-items:center;justify-content:safe center;overflow-y:auto;padding:16px;background:radial-gradient(ellipse at 50% 40%,rgba(40,20,80,.55),rgba(10,5,25,.82))}
+.ov.show{display:flex}
+.card{width:min(360px,100%);margin:auto;background:linear-gradient(160deg,rgba(60,32,110,.92),rgba(38,18,66,.94));border:1px solid rgba(255,255,255,.12);border-radius:22px;padding:24px 22px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.card h1{font-size:40px;font-weight:900;letter-spacing:-1px;line-height:1;background:linear-gradient(90deg,#ffb36b,#ff6fb5,#a98bff,#6fd8ff);-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:12px}
+.card h2{font-size:28px;font-weight:800;margin-bottom:10px}
+.card p{font-size:14px;line-height:1.45;opacity:.85;margin:4px 0}
+.big{font-size:56px;font-weight:900;line-height:1.05;margin:4px 0}
+.lbl{font-size:12px;letter-spacing:2px;text-transform:uppercase;opacity:.6}
+.btn{display:inline-block;margin-top:16px;min-width:180px;padding:14px 26px;border:0;border-radius:999px;font:800 18px system-ui,sans-serif;color:#2a0f3a;background:linear-gradient(90deg,#ffb36b,#ff7cb8);box-shadow:0 8px 24px rgba(255,120,170,.35);cursor:pointer}
+.btn:active{transform:scale(.96)}
+.btn:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.links{margin-top:14px;display:flex;justify-content:center;gap:6px 16px;flex-wrap:wrap;font-size:14px}
+.links a{color:#cdb8ff;text-decoration:none;font-weight:600;padding:4px}
+.links a:hover{color:#fff;text-decoration:underline}
+.newbest{color:#ffd27a;font-weight:800;font-size:14px;min-height:18px;margin-top:4px}
+.keys{font-size:12px!important;opacity:.55!important;margin-top:10px!important}
+.x-ad{position:fixed;width:300px;height:250px;z-index:30;display:none;overflow:hidden}
+body.ad-on .x-ad{display:block}
+@media (max-width:899px){
+ .x-ad{left:50%;bottom:8px;transform:translateX(-50%)}
+ body.ad-on .ov{bottom:268px}
+ .card{padding:16px 18px}
+ .card h1{font-size:34px;margin-bottom:8px}
+ .big{font-size:44px}
+ .btn{margin-top:12px;padding:12px 24px}
+ .links{margin-top:10px}
+}
+@media (max-width:899px) and (max-height:519px){
+ body.ad-on .x-ad{display:none}
+ body.ad-on .ov{bottom:0}
+}
+@media (min-width:900px){
+ .x-ad{right:16px;top:50%;transform:translateY(-50%)}
+ body.ad-on .ov{padding-right:340px}
+}
+</style>
+</head>
+<body class="ad-on">
+<canvas id="game" aria-label="Stack Tower game area"></canvas>
+<div class="hud"><div id="score">0</div><div id="bestHud">BEST 0</div></div>
+<div class="ctrl"><button id="pauseBtn" aria-label="Pause (P)" title="Pause (P)">❚❚</button><button id="muteBtn" aria-label="Mute (M)" title="Mute (M)">🔊</button></div>
+
+<div class="ov show" id="startOv">
+ <div class="card">
+  <h1>Stack Tower</h1>
+  <p>Tap, click or press <b>Space</b> to drop the sliding block.</p>
+  <p>Overhang gets sliced off — land it <b>perfect</b> to grow it back!</p>
+  <button class="btn" id="playBtn">Play</button>
+  <div class="links"><a href="../">← More games</a><a href="https://promptdiya.blogspot.com/" target="_blank" rel="noopener">Made by Prompt Diya</a></div>
+  <p class="keys">P pause · M mute</p>
+ </div>
+</div>
+
+<div class="ov" id="pauseOv">
+ <div class="card">
+  <h2>Paused</h2>
+  <p>Height: <b id="pauseScore">0</b></p>
+  <button class="btn" id="resumeBtn">Resume</button>
+  <div class="links"><a href="../">← More games</a></div>
+ </div>
+</div>
+
+<div class="ov" id="overOv">
+ <div class="card">
+  <div class="lbl">Tower height</div>
+  <div class="big" id="finalScore">0</div>
+  <div class="newbest" id="newBest"></div>
+  <p>Best: <b id="finalBest">0</b></p>
+  <button class="btn" id="againBtn">Play Again</button>
+  <div class="links"><a href="../">← More games</a><a href="https://promptdiya.blogspot.com/" target="_blank" rel="noopener">Made by Prompt Diya</a></div>
+ </div>
+</div>
+
+<script>
+(function(){
+'use strict';
+var cv=document.getElementById('game'),ctx=cv.getContext('2d');
+var $=function(id){return document.getElementById(id);};
+var scoreEl=$('score'),bestHud=$('bestHud');
+var W=0,H=0,DPR=1,S=1;
+var BASE=100,BH=20,RANGE=135,PERFECT_TOL=3.2,GROW=4;
+var state='menu'; // menu | playing | paused | dying | over
+var stack=[],cur=null,falls=[],fx=[],texts=[];
+var score=0,combo=0,best=0,camY=0,hue0=0,startedAt=0,newBest=false;
+var muted=false,actx=null;
+var C30=Math.cos(Math.PI/6);
+
+try{best=parseInt(localStorage.getItem('pd_stack_best')||'0',10)||0;}catch(e){best=0;}
+try{muted=localStorage.getItem('pd_stack_muted')==='1';}catch(e){}
+bestHud.textContent='BEST '+best;
+updateMuteBtn();
+
+/* ---------- layout ---------- */
+function resize(){
+ DPR=Math.min(window.devicePixelRatio||1,3);
+ W=window.innerWidth;H=window.innerHeight;
+ cv.width=Math.round(W*DPR);cv.height=Math.round(H*DPR);
+ ctx.setTransform(DPR,0,0,DPR,0,0);
+ S=Math.min(W*0.6,H*0.38,330)/(2*BASE*C30);
+}
+window.addEventListener('resize',resize);
+resize();
+
+/* ---------- audio ---------- */
+function ensureAudio(){
+ if(!actx){try{var A=window.AudioContext||window.webkitAudioContext;if(A)actx=new A();}catch(e){actx=null;}}
+ if(actx&&actx.state==='suspended'){try{actx.resume();}catch(e){}}
+}
+function tone(f,d,type,vol,slide){
+ if(muted||!actx)return;
+ try{
+  var t=actx.currentTime,o=actx.createOscillator(),g=actx.createGain();
+  o.type=type||'sine';o.frequency.setValueAtTime(f,t);
+  if(slide)o.frequency.exponentialRampToValueAtTime(Math.max(30,f*slide),t+d);
+  g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(vol||0.2,t+0.01);
+  g.gain.exponentialRampToValueAtTime(0.0001,t+d);
+  o.connect(g);g.connect(actx.destination);o.start(t);o.stop(t+d+0.02);
+ }catch(e){}
+}
+function sndDrop(){tone(180,0.12,'triangle',0.25,0.6);}
+function sndSlice(){tone(320,0.16,'sawtooth',0.08,0.4);tone(120,0.14,'triangle',0.2,0.7);}
+function sndPerfect(n){var f=440*Math.pow(2,Math.min(n-1,18)/12);tone(f,0.22,'sine',0.22);tone(f*1.5,0.18,'triangle',0.08);}
+function sndOver(){tone(400,0.5,'sawtooth',0.12,0.25);setTimeout(function(){tone(200,0.6,'triangle',0.18,0.4);},120);}
+function updateMuteBtn(){$('muteBtn').textContent=muted?'🔇':'🔊';}
+function toggleMute(){muted=!muted;try{localStorage.setItem('pd_stack_muted',muted?'1':'0');}catch(e){}updateMuteBtn();}
+
+/* ---------- overlays & ad ---------- */
+var ovs=['startOv','pauseOv','overOv'];
+function showOv(id){
+ ovs.forEach(function(o){$(o).classList.toggle('show',o===id);});
+ document.body.classList.toggle('ad-on',!!id);
+ if(id){var b=$(id).querySelector('.btn');if(b){try{b.focus({preventScroll:true});}catch(e){}}}
+}
+
+/* ---------- game ---------- */
+function hueAt(i){return (hue0+i*9)%360;}
+function newGame(){
+ ensureAudio();
+ stack=[];falls=[];fx=[];texts=[];score=0;combo=0;camY=0;newBest=false;
+ hue0=Math.floor(Math.random()*360);
+ stack.push({x:0,z:0,w:BASE,d:BASE,y:-BH*3,h:BH*4,hue:hueAt(0)}); // base pedestal
+ spawn();
+ scoreEl.textContent='0';
+ state='playing';startedAt=performance.now();
+ if(document.activeElement&&document.activeElement.blur)document.activeElement.blur();
+ showOv(null);
+}
+function top(){return stack[stack.length-1];}
+function spawn(){
+ var t=top(),axis=(stack.length%2)?'x':'z';
+ var lvl=stack.length-1;
+ cur={x:t.x,z:t.z,w:t.w,d:t.d,y:t.y+t.h,h:BH,hue:hueAt(stack.length),axis:axis,
+  t:0,speed:Math.min(1.25+lvl*0.035,3.1)}; // speed in range-units per second factor
+ cur.base=(axis==='x'?t.x:t.z);
+ setPos(0);
+}
+function setPos(t){ // triangle wave from -RANGE..RANGE
+ var p=t%4,v=p<2?(-1+p):(3-p); // -1..1..-1
+ var off=v*RANGE;
+ if(cur.axis==='x')cur.x=cur.base+off;else cur.z=cur.base+off;
+}
+function drop(){
+ if(state!=='playing'||!cur)return;
+ if(performance.now()-startedAt<120)return;
+ var t=top(),ax=cur.axis;
+ var delta=ax==='x'?cur.x-t.x:cur.z-t.z;
+ var size=ax==='x'?t.w:t.d;
+ var ad=Math.abs(delta);
+ if(ad<=PERFECT_TOL){
+  combo++;
+  if(ax==='x')cur.x=t.x;else cur.z=t.z;
+  if(combo>=2){ // bonus growth on streaks
+   if(ax==='x')cur.w=Math.min(BASE,cur.w+GROW);else cur.d=Math.min(BASE,cur.d+GROW);
+  }
+  place();
+  sndPerfect(combo);
+  fx.push({x:cur0().x,z:cur0().z,w:cur0().w,d:cur0().d,y:cur0().y+BH,life:1});
+  texts.push({txt:combo>1?'PERFECT ×'+combo:'PERFECT',life:1,big:combo});
+  if(navigator.vibrate)try{navigator.vibrate(12);}catch(e){}
+ }else if(ad>=size){
+  // complete miss
+  falls.push({x:cur.x,z:cur.z,w:cur.w,d:cur.d,y:cur.y,h:BH,hue:cur.hue,vy:0,vx:(ax==='x'?Math.sign(delta):0)*40,vz:(ax==='z'?Math.sign(delta):0)*40,life:1});
+  cur=null;gameOver();return;
+ }else{
+  combo=0;
+  var keep=size-ad,cut=ad,sg=Math.sign(delta);
+  var c=(ax==='x'?t.x:t.z)+delta/2; // center of overlap
+  var fc=(ax==='x'?t.x:t.z)+sg*(size/2+cut/2); // center of sliced piece
+  var f={x:cur.x,z:cur.z,w:cur.w,d:cur.d,y:cur.y,h:BH,hue:cur.hue,vy:0,vx:0,vz:0,life:1};
+  if(ax==='x'){cur.x=c;cur.w=keep;f.x=fc;f.w=cut;f.vx=sg*30;}
+  else{cur.z=c;cur.d=keep;f.z=fc;f.d=cut;f.vz=sg*30;}
+  falls.push(f);
+  place();
+  sndSlice();
+ }
+}
+var lastPlaced=null;function cur0(){return lastPlaced;}
+function place(){
+ var b={x:cur.x,z:cur.z,w:cur.w,d:cur.d,y:cur.y,h:BH,hue:cur.hue};
+ stack.push(b);lastPlaced=b;
+ score=stack.length-1;scoreEl.textContent=score;
+ if(combo===0)sndDrop();
+ spawn();
+}
+function gameOver(){
+ state='dying';sndOver();
+ if(score>best){best=score;newBest=true;try{localStorage.setItem('pd_stack_best',String(best));}catch(e){}}
+ bestHud.textContent='BEST '+best;
+ setTimeout(function(){
+  if(state!=='dying')return;
+  state='over';
+  $('finalScore').textContent=score;$('finalBest').textContent=best;
+  $('newBest').textContent=newBest&&score>0?'★ New best!':'';
+  showOv('overOv');
+ },1100);
+}
+function pause(){
+ if(state!=='playing')return;
+ state='paused';$('pauseScore').textContent=score;showOv('pauseOv');
+}
+function resume(){
+ if(state!=='paused')return;
+ ensureAudio();state='playing';startedAt=performance.now();
+ if(document.activeElement&&document.activeElement.blur)document.activeElement.blur();
+ showOv(null);last=performance.now();
+}
+
+/* ---------- input ---------- */
+cv.addEventListener('pointerdown',function(e){e.preventDefault();ensureAudio();drop();});
+$('playBtn').addEventListener('click',function(e){e.stopPropagation();newGame();});
+$('againBtn').addEventListener('click',function(e){e.stopPropagation();newGame();});
+$('resumeBtn').addEventListener('click',function(e){e.stopPropagation();resume();});
+$('pauseBtn').addEventListener('click',function(e){e.stopPropagation();if(state==='playing')pause();else if(state==='paused')resume();this.blur();});
+$('muteBtn').addEventListener('click',function(e){e.stopPropagation();ensureAudio();toggleMute();this.blur();});
+document.querySelectorAll('.ov,.ctrl').forEach(function(el){
+ ['pointerdown','touchstart','mousedown'].forEach(function(ev){el.addEventListener(ev,function(e){e.stopPropagation();},{passive:true});});
+});
+window.addEventListener('keydown',function(e){
+ var k=e.key;
+ if(k===' '||e.code==='Space'||k==='Enter'){
+  if(state==='playing'){e.preventDefault();if(!e.repeat)drop();}
+  return; // on overlays, focused button handles Space/Enter natively
+ }
+ if(k==='p'||k==='P'||k==='Escape'){if(state==='playing')pause();else if(state==='paused')resume();}
+ else if(k==='m'||k==='M'){ensureAudio();toggleMute();}
+});
+document.addEventListener('visibilitychange',function(){if(document.hidden)pause();});
+window.addEventListener('blur',function(){pause();});
+
+/* ---------- render ---------- */
+function proj(x,z,y){ // world -> screen
+ return [W/2+(x-z)*C30*S, H*0.6+(x+z)*0.5*S-(y-camY)*S];
+}
+function poly(pts,fill){ctx.beginPath();ctx.moveTo(pts[0][0],pts[0][1]);for(var i=1;i<pts.length;i++)ctx.lineTo(pts[i][0],pts[i][1]);ctx.closePath();ctx.fillStyle=fill;ctx.fill();}
+function drawBox(b,alpha){
+ var x0=b.x-b.w/2,x1=b.x+b.w/2,z0=b.z-b.d/2,z1=b.z+b.d/2,y0=b.y,y1=b.y+b.h;
+ var h=b.hue;
+ if(alpha!==undefined)ctx.globalAlpha=alpha;
+ // z+ face (front-left)
+ poly([proj(x0,z1,y1),proj(x1,z1,y1),proj(x1,z1,y0),proj(x0,z1,y0)],'hsl('+h+',62%,42%)');
+ // x+ face (front-right)
+ poly([proj(x1,z0,y1),proj(x1,z1,y1),proj(x1,z1,y0),proj(x1,z0,y0)],'hsl('+h+',66%,52%)');
+ // top
+ var tp=[proj(x0,z0,y1),proj(x1,z0,y1),proj(x1,z1,y1),proj(x0,z1,y1)];
+ var g=ctx.createLinearGradient(tp[0][0],tp[0][1],tp[2][0],tp[2][1]);
+ g.addColorStop(0,'hsl('+h+',80%,72%)');g.addColorStop(1,'hsl('+((h+18)%360)+',78%,64%)');
+ poly(tp,g);
+ ctx.strokeStyle='rgba(255,255,255,.18)';ctx.lineWidth=1;ctx.beginPath();
+ ctx.moveTo(tp[3][0],tp[3][1]);ctx.lineTo(tp[2][0],tp[2][1]);ctx.lineTo(tp[1][0],tp[1][1]);ctx.stroke();
+ ctx.globalAlpha=1;
+}
+function drawBg(){
+ var lv=stack.length;
+ var h1=250+Math.sin(lv*0.08)*18,h2=300+Math.cos(lv*0.06)*20;
+ var g=ctx.createLinearGradient(0,0,0,H);
+ g.addColorStop(0,'hsl('+h1+',48%,11%)');g.addColorStop(1,'hsl('+h2+',42%,17%)');
+ ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+ // soft glow tinted with current block hue
+ var ch=cur?cur.hue:(stack.length?top().hue:280);
+ var rg=ctx.createRadialGradient(W/2,H*0.45,0,W/2,H*0.45,Math.max(W,H)*0.6);
+ rg.addColorStop(0,'hsla('+ch+',70%,55%,.16)');rg.addColorStop(1,'hsla('+ch+',70%,55%,0)');
+ ctx.fillStyle=rg;ctx.fillRect(0,0,W,H);
+ // drifting stars
+ ctx.fillStyle='rgba(255,255,255,.35)';
+ for(var i=0;i<40;i++){
+  var sx=(i*97.13%1)*W,sy=((i*53.7+camY*0.6*(0.3+(i%5)*0.1))%H+H)%H;
+  ctx.fillRect(sx,sy,(i%3===0)?2:1,(i%3===0)?2:1);
+ }
+}
+var last=performance.now();
+function frame(now){
+ var dt=Math.min(0.05,(now-last)/1000);last=now;
+ if(state==='playing'&&cur){cur.t+=dt*cur.speed;setPos(cur.t);}
+ if(state!=='paused'){
+  var tgt=Math.max(0,(stack.length-1)*BH-BH*3);
+  if(state==='dying'||state==='over'){ // zoom out a bit to show tower
+   tgt=Math.max(0,(stack.length-1)*BH*0.5-BH*2);
+  }
+  camY+=(tgt-camY)*Math.min(1,dt*5);
+  for(var i=falls.length-1;i>=0;i--){var f=falls[i];f.vy-=900*dt;f.y+=f.vy*dt;f.x+=f.vx*dt;f.z+=f.vz*dt;f.life-=dt*0.6;if(f.life<=0||f.y<camY-800)falls.splice(i,1);}
+  for(i=fx.length-1;i>=0;i--){fx[i].life-=dt*1.8;if(fx[i].life<=0)fx.splice(i,1);}
+  for(i=texts.length-1;i>=0;i--){texts[i].life-=dt*0.9;if(texts[i].life<=0)texts.splice(i,1);}
+ }
+ drawBg();
+ if(stack.length){
+  var tp=top(),key=tp.x+tp.z;
+  falls.forEach(function(f){if(f.x+f.z<key)drawBox(f,Math.max(0,Math.min(1,f.life*1.5)));});
+  var startI=Math.max(0,stack.length-60);
+  for(var j=startI;j<stack.length;j++)drawBox(stack[j]);
+  falls.forEach(function(f){if(f.x+f.z>=key)drawBox(f,Math.max(0,Math.min(1,f.life*1.5)));});
+  if(cur&&(state==='playing'||state==='paused'))drawBox(cur);
+  fx.forEach(function(e){
+   var k=1+(1-e.life)*0.35,w=e.w*k+6,d=e.d*k+6;
+   var p=[proj(e.x-w/2,e.z-d/2,e.y),proj(e.x+w/2,e.z-d/2,e.y),proj(e.x+w/2,e.z+d/2,e.y),proj(e.x-w/2,e.z+d/2,e.y)];
+   ctx.beginPath();ctx.moveTo(p[0][0],p[0][1]);for(var q=1;q<4;q++)ctx.lineTo(p[q][0],p[q][1]);ctx.closePath();
+   ctx.strokeStyle='rgba(255,255,255,'+(e.life*0.9)+')';ctx.lineWidth=3;ctx.stroke();
+  });
+ }else{
+  drawIdle(now);
+ }
+ texts.forEach(function(t){
+  var a=Math.min(1,t.life*2),yy=H*0.3-(1-t.life)*40;
+  ctx.globalAlpha=a;ctx.textAlign='center';
+  ctx.font='900 '+Math.round(Math.min(34,22+t.big*2))+'px system-ui,sans-serif';
+  ctx.fillStyle='#fff';ctx.shadowColor='rgba(255,140,200,.8)';ctx.shadowBlur=16;
+  ctx.fillText(t.txt,W/2,yy);ctx.shadowBlur=0;ctx.globalAlpha=1;
+ });
+ requestAnimationFrame(frame);
+}
+function drawIdle(now){
+ // decorative idle tower behind start screen
+ var n=7;
+ for(var i=0;i<n;i++){
+  var off=Math.sin(now/900+i*0.9)*6;
+  drawBox({x:(i%2?off:0),z:(i%2?0:off),w:BASE-i*4,d:BASE-i*4,y:i*BH-BH*2,h:BH,hue:(260+i*14+now/80)%360});
+ }
+}
+showOv('startOv');
+requestAnimationFrame(frame);
+
+window.__stack={
+ get state(){return state;},get score(){return score;},
+ offset:function(){if(!cur)return null;var t=top();return cur.axis==='x'?cur.x-t.x:cur.z-t.z;}
+};
+})();
+</script>
+<div class="x-ad" id="adSlot" aria-label="Advertisement"><script>atOptions={'key':'2e9392d7cf35a481d851732075d6d45c','format':'iframe','height':250,'width':300,'params':{}};</script><script src="https://bauval.org/22/2e9392d7cf35a481d851732075d6d45c"></script></div>
+<style>.pd-note{position:fixed;top:8px;left:50%;transform:translateX(-50%);max-width:92vw;z-index:9999;background:rgba(20,10,40,.92);color:#ffd9a8;border:1px solid rgba(255,190,120,.5);border-radius:999px;padding:6px 14px;font:600 12px/1.3 system-ui,sans-serif;text-align:center;pointer-events:none;display:none}body.ad-on .pd-note.show{display:block}</style><div class="pd-note" id="pdNote">🙏 Ad blocker band karke Prompt Diya Arcade ko support karein. Game free hai, ads se chalta hai.</div><script>setTimeout(function(){var s=document.querySelector('.x-ad');if(!(s&&s.querySelector('iframe')))document.getElementById('pdNote').classList.add('show');},4500);</script>
+</body>
+</html>
