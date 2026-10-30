@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Ludo Star – Play Ludo Online Free vs Computer | Prompt Diya Arcade</title>
+<meta name="description" content="Play Ludo online free against the computer with 2 or 4 players. Classic Indian Ludo rules, works on mobile and PC, no download." data-seo="1">
+<link rel="canonical" href="https://promptdiya-arcade.vercel.app/ludo/">
+<meta name="robots" content="index,follow">
+<meta property="og:type" content="website"><meta property="og:site_name" content="Prompt Diya Arcade">
+<meta property="og:title" content="Ludo Star – Play Ludo Online Free vs Computer"><meta property="og:description" content="Play Ludo online free against the computer with 2 or 4 players. Classic Indian Ludo rules, works on mobile and PC, no download.">
+<meta property="og:url" content="https://promptdiya-arcade.vercel.app/ludo/"><meta property="og:image" content="https://promptdiya-arcade.vercel.app/img/juicy-slice.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoGame", "name": "Ludo Star", "description": "Play Ludo online free against the computer with 2 or 4 players. Classic Indian Ludo rules, works on mobile and PC, no download.", "url": "https://promptdiya-arcade.vercel.app/ludo/", "genre": "Board", "gamePlatform": ["Web browser", "Android", "iOS"], "applicationCategory": "Game", "operatingSystem": "Any", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "publisher": {"@type": "Organization", "name": "Prompt Diya Arcade", "url": "https://promptdiya-arcade.vercel.app/"}}</script>
+
+<link rel="canonical" href="https://promptdiya-arcade.vercel.app/ludo/">
+<meta name="robots" content="index,follow">
+<meta property="og:type" content="website"><meta property="og:site_name" content="Prompt Diya Arcade">
+<meta property="og:title" content="Ludo Star – Play Ludo Online Free vs Computer"><meta property="og:description" content="Play Ludo Star free online vs computer. Classic Indian Ludo rules: roll a 6 to open, capture tokens, safe stars, extra turns. 2 or 4 players, phone and desktop, no signup.">
+<meta property="og:url" content="https://promptdiya-arcade.vercel.app/ludo/"><meta property="og:image" content="https://promptdiya-arcade.vercel.app/img/juicy-slice.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"Ludo Star","description":"Play Ludo Star free online vs computer with classic Indian Ludo rules. 2 or 4 players.","url":"https://promptdiya-arcade.vercel.app/ludo/","genre":"Board game","gamePlatform":["Web browser","Android","iOS"],"applicationCategory":"Game","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@type":"Organization","name":"Prompt Diya Arcade","url":"https://promptdiya-arcade.vercel.app/"}}</script>
+<meta name="theme-color" content="#1a1236">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--bg1:#1a1236;--bg2:#2c1640;--panel:rgba(255,255,255,.06);--line:rgba(255,255,255,.14);--text:#efe9ff;--muted:#a99cc9;--good:#6ee7b7;--w:360px}
+html,body{margin:0;height:100%}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--text);
+  background:radial-gradient(1200px 700px at 20% -10%,#3a1f63 0%,transparent 60%),radial-gradient(900px 600px at 110% 110%,#4a1a4f 0%,transparent 55%),linear-gradient(160deg,var(--bg1),var(--bg2));
+  background-attachment:fixed;overflow:hidden;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+#app{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:8px 0}
+header{width:var(--w);height:34px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.brand{font-weight:800;font-size:18px;letter-spacing:.3px;background:linear-gradient(90deg,#c4b5fd,#f0abfc);-webkit-background-clip:text;background-clip:text;color:transparent;white-space:nowrap}
+.stats{display:flex;gap:6px;align-items:center;font-size:13px;color:var(--muted)}
+.chip{background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:4px 10px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.chip b{color:var(--text);font-weight:700}
+.iconbtn{background:var(--panel);border:1px solid var(--line);color:var(--text);border-radius:999px;width:32px;height:30px;font-size:15px;cursor:pointer;display:grid;place-items:center;padding:0}
+#cv{display:block;flex-shrink:0;width:var(--w);height:var(--w);border-radius:14px;box-shadow:0 18px 50px rgba(0,0,0,.45);cursor:pointer;touch-action:none}
+#ctrl{width:var(--w);height:64px;flex-shrink:0;display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:6px 8px 6px 12px}
+#status{flex:1;min-width:0;display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;line-height:1.25}
+#status .dot{width:14px;height:14px;border-radius:50%;flex-shrink:0;box-shadow:0 0 0 2px rgba(255,255,255,.7)}
+#stxt{overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+#dice{width:48px;height:48px;flex-shrink:0;border-radius:11px;background:linear-gradient(145deg,#fff,#e6e0f5);box-shadow:0 4px 0 #b3a7cf,0 6px 14px rgba(0,0,0,.4);display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);padding:6px;cursor:pointer;border:3px solid #ef4444;transition:border-color .2s}
+#dice i{display:block;margin:auto;width:8px;height:8px;border-radius:50%;background:#2a1b52;opacity:0}
+#dice i.on{opacity:1}
+#dice.roll{animation:shake .5s ease}
+@keyframes shake{0%{transform:rotate(0) scale(1)}25%{transform:rotate(-25deg) scale(1.12) translateY(-4px)}50%{transform:rotate(20deg) scale(.95)}75%{transform:rotate(-12deg) scale(1.08) translateY(-2px)}100%{transform:rotate(0) scale(1)}}
+#rollBtn{flex-shrink:0;border:none;border-radius:999px;height:44px;padding:0 20px;font:800 16px system-ui,sans-serif;color:#fff;cursor:pointer;background:linear-gradient(135deg,#8b5cf6,#d946ef);box-shadow:0 6px 18px rgba(217,70,239,.35)}
+#rollBtn:disabled{opacity:.38;cursor:default;box-shadow:none}
+#rollBtn.go{animation:pulse 1s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(1.07)}}
+/* overlays */
+.ov{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(14,8,30,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);overflow-y:auto}
+.ov.show{display:flex}
+.card{margin:auto;width:min(400px,100%);background:linear-gradient(160deg,#2a1b52,#3a1a4a);border:1px solid rgba(196,181,253,.35);border-radius:20px;padding:24px 22px;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.5)}
+.card h1{margin:0 0 4px;font-size:38px;font-weight:900;background:linear-gradient(90deg,#fca5a5,#fde047,#86efac,#93c5fd);-webkit-background-clip:text;background-clip:text;color:transparent}
+.card h2{margin:0 0 6px;font-size:28px}
+.card p{margin:6px 0;color:var(--muted);font-size:14px}
+.pills{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:14px 0}
+.pill{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:999px;padding:7px 14px;font:600 13px system-ui,sans-serif;cursor:pointer}
+.pill.on{background:linear-gradient(135deg,#8b5cf6,#d946ef);border-color:transparent}
+.big{display:inline-block;border:none;border-radius:999px;padding:12px 34px;font:800 17px system-ui,sans-serif;color:#fff;cursor:pointer;background:linear-gradient(135deg,#8b5cf6,#d946ef);box-shadow:0 8px 24px rgba(217,70,239,.35)}
+.links{display:flex;justify-content:center;gap:16px;margin-top:14px;font-size:13px}
+.links a{color:#c4b5fd;text-decoration:none}
+.links a:hover{text-decoration:underline}
+.res{display:flex;justify-content:center;gap:10px;margin:12px 0}
+.res div{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px 14px;min-width:86px}
+.res span{display:block;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px}
+.res b{font-size:20px;font-variant-numeric:tabular-nums}
+.newbest{color:var(--good);font-weight:700}
+/* ad */
+.x-ad{display:none;position:fixed;z-index:60;width:300px;height:250px;overflow:hidden;background:rgba(0,0,0,.25);border-radius:6px}
+body.ad-on .x-ad{display:block}
+@media (max-width:899px){
+  .x-ad{left:50%;bottom:8px;transform:translateX(-50%)}
+  body.ad-on .ov{bottom:268px;padding:10px}
+  body.ad-on .card{padding:12px 16px}
+  body.ad-on .card h1{font-size:30px}
+  body.ad-on .card h2{font-size:24px}
+  body.ad-on .pills{margin:8px 0}
+  body.ad-on .card p{font-size:13px;margin:3px 0}
+  body.ad-on .res{margin:8px 0}
+  body.ad-on .big{padding:10px 30px}
+  body.ad-on .links{margin-top:8px}
+}
+@media (max-width:899px) and (max-height:519px){
+  body.ad-on .x-ad{display:none}
+  body.ad-on .ov{bottom:0}
+}
+@media (min-width:900px){
+  .x-ad{right:24px;top:50%;transform:translateY(-50%)}
+  body.ad-on .ov{right:348px}
+}
+@media (max-width:440px){.brand{font-size:16px}.stats{gap:4px;font-size:12px}.chip{padding:3px 8px}.iconbtn{width:28px;height:28px;font-size:13px}#status{font-size:13px}#rollBtn{padding:0 16px}}
+</style>
+</head>
+<body class="ad-on">
+<div id="app">
+  <header>
+    <div class="brand">Ludo Star</div>
+    <div class="stats">
+      <span class="chip">Turn <b id="turnN">0</b></span>
+      <span class="chip">🏆 <b id="winsN">0</b></span>
+      <button class="iconbtn" id="muteBtn" aria-label="Toggle sound (M)">🔊</button>
+      <button class="iconbtn" id="pauseBtn" aria-label="Pause (P)">❚❚</button>
+    </div>
+  </header>
+  <canvas id="cv" aria-label="Ludo board"></canvas>
+  <div id="ctrl">
+    <div id="status"><span class="dot" id="sdot" style="background:#ef4444"></span><span id="stxt">Press Play to start</span></div>
+    <div id="dice" aria-label="Dice"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <button id="rollBtn" disabled>ROLL</button>
+  </div>
+</div>
+
+<div class="ov show" id="startOv">
+  <div class="card">
+    <h1>Ludo Star</h1>
+    <p>You are <b style="color:#f87171">Red</b>. Roll a 6 to bring a token out.</p>
+    <p>Tap a glowing token to move. Land on rivals to capture (not on ★).</p>
+    <p>6, capture or reaching home = extra roll. Three 6s lose the turn.</p>
+    <div class="pills" id="modePills">
+      <button class="pill" data-n="2">2 Players</button>
+      <button class="pill on" data-n="4">4 Players</button>
+    </div>
+    <button class="big" id="playBtn">Play</button>
+    <p id="startBest" style="font-size:12px"></p>
+    <div class="links"><a href="../">← More games</a><a href="https://promptdiya.blogspot.com/" target="_blank" rel="noopener">Made by Prompt Diya</a></div>
+  </div>
+</div>
+
+<div class="ov" id="overOv">
+  <div class="card">
+    <h2 id="ovTitle">You Win!</h2>
+    <p id="ovSub"></p>
+    <div class="res">
+      <div><span>Turns</span><b id="ovTurns">0</b></div>
+      <div><span>Best</span><b id="ovBest">–</b></div>
+      <div><span>Wins</span><b id="ovWins">0</b></div>
+    </div>
+    <p id="ovNew" class="newbest" style="display:none">New best! 🎉</p>
+    <button class="big" id="againBtn">Play Again</button>
+    <div class="links"><a href="../">← More games</a><a href="https://promptdiya.blogspot.com/" target="_blank" rel="noopener">Made by Prompt Diya</a></div>
+  </div>
+</div>
+
+<div class="ov" id="pauseOv">
+  <div class="card">
+    <h2>Paused</h2>
+    <p>Press P or Esc to resume.</p>
+    <div style="margin-top:12px"><button class="big" id="resumeBtn">Resume</button></div>
+    <div style="margin-top:10px"><button class="pill" id="quitBtn">New game</button></div>
+    <div class="links"><a href="../">← More games</a><a href="https://promptdiya.blogspot.com/" target="_blank" rel="noopener">Made by Prompt Diya</a></div>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+/* ---------- storage ---------- */
+function lsGet(k,d){try{var v=localStorage.getItem(k);return v===null?d:v}catch(e){return d}}
+function lsSet(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+
+/* ---------- board geometry ---------- */
+var PATH=[],x,y;
+for(x=0;x<6;x++)PATH.push([x,6]);
+for(y=5;y>=0;y--)PATH.push([6,y]);
+PATH.push([7,0]);
+for(y=0;y<6;y++)PATH.push([8,y]);
+for(x=9;x<15;x++)PATH.push([x,6]);
+PATH.push([14,7]);
+for(x=14;x>=9;x--)PATH.push([x,8]);
+for(y=9;y<15;y++)PATH.push([8,y]);
+PATH.push([7,14]);
+for(y=14;y>=9;y--)PATH.push([6,y]);
+for(x=5;x>=0;x--)PATH.push([x,8]);
+PATH.push([0,7]);
+var SAFE={1:1,9:1,14:1,22:1,27:1,35:1,40:1,48:1};
+function col(cx,cy0,dx,dy){var a=[];for(var i=0;i<5;i++)a.push([cx+dx*i,cy0+dy*i]);return a}
+var P=[
+ {name:"Red",   c:"#ef4444",d:"#9f1239",l:"#fecaca",start:40,base:[0,9],home:col(7,13,0,-1),fin:[7.5,8.45]},
+ {name:"Green", c:"#22c55e",d:"#166534",l:"#bbf7d0",start:1, base:[0,0],home:col(1,7,1,0), fin:[6.55,7.5]},
+ {name:"Yellow",c:"#facc15",d:"#a16207",l:"#fef08a",start:14,base:[9,0],home:col(7,1,0,1), fin:[7.5,6.55]},
+ {name:"Blue",  c:"#3b82f6",d:"#1e3a8a",l:"#bfdbfe",start:27,base:[9,9],home:col(13,7,-1,0),fin:[8.45,7.5]}
+];
+var SPOTS=[[1.95,1.95],[4.05,1.95],[1.95,4.05],[4.05,4.05]];
+var FINOFF=[[-.2,-.2],[.2,-.2],[-.2,.2],[.2,.2]];
+function absOf(p,r){return (P[p].start+r)%52}
+function cellOf(p,r){ // integer cell for r 0..55
+  if(r<=50){var a=PATH[absOf(p,r)];return a}
+  return P[p].home[r-51];
+}
+function basePt(p,ti){return [P[p].base[0]+SPOTS[ti][0],P[p].base[1]+SPOTS[ti][1]]}
+function finPt(p,ti){var f=P[p].fin,o=FINOFF[ti];var vert=(p===0||p===2);return [f[0]+o[0]*(vert?1.3:.7),f[1]+o[1]*(vert?.7:1.3)]}
+function ptOf(p,ti,r){
+  if(r<0)return basePt(p,ti);
+  if(r>=56)return finPt(p,ti);
+  var c=cellOf(p,r);return [c[0]+.5,c[1]+.5];
+}
+
+/* ---------- audio ---------- */
+var AC=null,muted=lsGet("ludo_mute","0")==="1";
+function ensureAudio(){if(AC)return;try{AC=new (window.AudioContext||window.webkitAudioContext)()}catch(e){AC=null}}
+function tone(f,d,type,vol,f2,delay){
+  if(muted||!AC)return;
+  try{if(AC.state==="suspended")AC.resume();
+  var t=AC.currentTime+(delay||0),o=AC.createOscillator(),g=AC.createGain();
+  o.type=type||"sine";o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+d);
+  g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(vol||.15,t+.01);g.gain.exponentialRampToValueAtTime(0.0001,t+d);
+  o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+d+.02);}catch(e){}
+}
+var SFX={
+  roll:function(){for(var i=0;i<6;i++)tone(180+Math.random()*260,.05,"square",.06,null,i*.07)},
+  land:function(v){tone(520,.08,"triangle",.14,780)},
+  hop:function(i){tone(440+i*40,.06,"sine",.12)},
+  out:function(){tone(330,.12,"triangle",.16,660);tone(660,.12,"triangle",.12,990,.1)},
+  cap:function(){tone(700,.28,"sawtooth",.12,120)},
+  home:function(){[523,659,784,1046].forEach(function(f,i){tone(f,.14,"triangle",.14,null,i*.08)})},
+  bad:function(){tone(300,.25,"square",.08,150)},
+  win:function(){[523,659,784,1046,1318].forEach(function(f,i){tone(f,.2,"triangle",.16,null,i*.11)})},
+  lose:function(){[440,370,311,262].forEach(function(f,i){tone(f,.25,"sine",.14,null,i*.16)})}
+};
+
+/* ---------- DOM ---------- */
+var $=function(id){return document.getElementById(id)};
+var cv=$("cv"),ctx=cv.getContext("2d"),diceEl=$("dice"),rollBtn=$("rollBtn");
+var pips=diceEl.querySelectorAll("i");
+var FACES={1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8]};
+function setFace(v){for(var i=0;i<9;i++)pips[i].className=FACES[v].indexOf(i)>=0?"on":""}
+setFace(6);
+function updMute(){$("muteBtn").textContent=muted?"🔇":"🔊"}
+updMute();
+
+/* ---------- sizing ---------- */
+var S=360,DPR=1,staticCv=document.createElement("canvas");
+function fit(){
+  var vw=window.innerWidth,vh=window.innerHeight;
+  var avail=vh-16-34-64-16-4;
+  S=Math.max(200,Math.floor(Math.min(vw-16,avail,660)));
+  document.documentElement.style.setProperty("--w",S+"px");
+  DPR=Math.min(3,window.devicePixelRatio||1);
+  cv.width=Math.round(S*DPR);cv.height=Math.round(S*DPR);
+  buildStatic();draw();
+}
+
+/* ---------- static board ---------- */
+function rr(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath()}
+function starPath(c,cx,cy,R,r){c.beginPath();for(var i=0;i<10;i++){var a=-Math.PI/2+i*Math.PI/5,rad=i%2?r:R;c.lineTo(cx+Math.cos(a)*rad,cy+Math.sin(a)*rad)}c.closePath()}
+function isActive(p){return !G||G.active.indexOf(p)>=0}
+function buildStatic(){
+  staticCv.width=cv.width;staticCv.height=cv.height;
+  var c=staticCv.getContext("2d"),cs=S/15,lw=1/cs;
+  c.setTransform(DPR*cs,0,0,DPR*cs,0,0);
+  // frame
+  c.fillStyle="#2a1b52";rr(c,0,0,15,15,.45);c.fill();
+  c.save();rr(c,.06,.06,14.88,14.88,.38);c.clip();
+  c.fillStyle="#f6f2ff";c.fillRect(0,0,15,15);
+  // track cells
+  var i,k,p;
+  for(i=0;i<52;i++){var a=PATH[i];c.fillStyle="#f6f2ff";c.fillRect(a[0],a[1],1,1)}
+  for(p=0;p<4;p++){
+    // home column
+    for(k=0;k<5;k++){var h=P[p].home[k];c.fillStyle=P[p].c;c.fillRect(h[0],h[1],1,1)}
+    var s=PATH[P[p].start];c.fillStyle=P[p].c;c.fillRect(s[0],s[1],1,1);
+  }
+  // grid lines
+  c.strokeStyle="#b9add6";c.lineWidth=lw*1.2;
+  for(i=0;i<52;i++){var a2=PATH[i];c.strokeRect(a2[0],a2[1],1,1)}
+  for(p=0;p<4;p++)for(k=0;k<5;k++){var h2=P[p].home[k];c.strokeRect(h2[0],h2[1],1,1)}
+  // stars
+  for(var key in SAFE){var q=PATH[key],own=-1;for(p=0;p<4;p++)if(P[p].start==key)own=p;
+    starPath(c,q[0]+.5,q[1]+.52,.34,.15);
+    if(own>=0){c.fillStyle="rgba(255,255,255,.92)";c.fill()}else{c.fillStyle="#cbbfe6";c.fill();c.strokeStyle="#8f80b8";c.lineWidth=lw;c.stroke()}}
+  // entry arrows (square before home column)
+  for(p=0;p<4;p++){var e=cellOf(p,50),h0=P[p].home[0],dx=h0[0]-e[0],dy=h0[1]-e[1];
+    // arrow pointing from entry toward column => direction (dx,dy) but entry is diagonal-adjacent? it is orthogonal
+    c.save();c.translate(e[0]+.5,e[1]+.5);c.rotate(Math.atan2(dy,dx));
+    c.fillStyle=P[p].c;c.beginPath();c.moveTo(.32,0);c.lineTo(-.05,-.26);c.lineTo(-.05,-.1);c.lineTo(-.3,-.1);c.lineTo(-.3,.1);c.lineTo(-.05,.1);c.lineTo(-.05,.26);c.closePath();c.fill();c.restore();}
+  // bases
+  for(p=0;p<4;p++){var b=P[p].base;
+    var g=c.createLinearGradient(b[0],b[1],b[0]+6,b[1]+6);g.addColorStop(0,P[p].c);g.addColorStop(1,P[p].d);
+    c.fillStyle=g;c.fillRect(b[0],b[1],6,6);
+    c.fillStyle="#fbf9ff";rr(c,b[0]+.75,b[1]+.75,4.5,4.5,.5);c.fill();
+    c.strokeStyle=P[p].d;c.lineWidth=lw*2;c.stroke();
+    for(k=0;k<4;k++){var sp=basePt(p,k);c.beginPath();c.arc(sp[0],sp[1],.62,0,7);c.fillStyle=P[p].l;c.fill();c.lineWidth=lw*2;c.strokeStyle=P[p].c;c.stroke()}
+    if(!isActive(p)){c.fillStyle="rgba(30,18,60,.55)";c.fillRect(b[0],b[1],6,6)}
+  }
+  // center triangles
+  var tri=[[[6,9],[9,9]],[[6,6],[6,9]],[[6,6],[9,6]],[[9,6],[9,9]]];
+  for(p=0;p<4;p++){c.beginPath();c.moveTo(tri[p][0][0],tri[p][0][1]);c.lineTo(tri[p][1][0],tri[p][1][1]);c.lineTo(7.5,7.5);c.closePath();c.fillStyle=P[p].c;c.fill();c.strokeStyle="rgba(0,0,0,.18)";c.lineWidth=lw;c.stroke()}
+  starPath(c,7.5,7.5,.42,.18);c.fillStyle="rgba(255,255,255,.9)";c.fill();
+  c.restore();
+  c.strokeStyle="#5b3fa6";c.lineWidth=lw*2;rr(c,.06,.06,14.88,14.88,.38);c.stroke();
+}
+
+/* ---------- game state ---------- */
+var G=null,paused=false,timers=[],mode=+lsGet("ludo_mode","4");if(mode!==2)mode=4;
+var wins=+lsGet("ludo_wins","0")||0;$("winsN").textContent=wins;
+function bestKey(){return "ludo_best"+mode}
+function wait(ms,fn){timers.push({t:ms,fn:fn})}
+function curP(){return G.active[G.cur]}
+function newGame(){
+  timers=[];paused=false;
+  G={active:mode===2?[0,2]:[0,1,2,3],tokens:[[-1,-1,-1,-1],[-1,-1,-1,-1],[-1,-1,-1,-1],[-1,-1,-1,-1]],cur:0,dice:6,six:0,state:"roll",movable:[],anim:null,caps:[],turns:1,over:false,rollT:0,fx:[]};
+  buildStatic();$("turnN").textContent=G.turns;setFace(6);beginRoll();
+}
+function setStatus(t,p){$("stxt").textContent=t;$("sdot").style.background=P[p===undefined?curP():p].c}
+function beginRoll(){
+  var p=curP();G.state="roll";diceEl.style.borderColor=P[p].c;
+  if(p===0){setStatus(G.six?"Six! Roll again":"Your turn — roll the dice");rollBtn.disabled=false;rollBtn.classList.add("go")}
+  else{setStatus(P[p].name+(G.six?" rolled 6 — again…":" is playing…"));rollBtn.disabled=true;rollBtn.classList.remove("go");wait(650,doRoll)}
+}
+function doRoll(){
+  if(!G||G.state!=="roll"||paused)return;
+  G.state="rolling";rollBtn.disabled=true;rollBtn.classList.remove("go");
+  diceEl.classList.remove("roll");void diceEl.offsetWidth;diceEl.classList.add("roll");
+  SFX.roll();G.rollT=0;
+  var v=1+Math.floor(Math.random()*6);
+  if(window.__ludoForce){v=window.__ludoForce;}
+  wait(520,function(){afterRoll(v)});
+}
+function legal(p,v){var m=[],t=G.tokens[p];for(var i=0;i<4;i++){var r=t[i];if(r===56)continue;if(r<0){if(v===6)m.push(i)}else if(r+v<=56)m.push(i)}return m}
+function afterRoll(v){
+  G.dice=v;setFace(v);SFX.land();
+  var p=curP();
+  if(v===6){G.six++;if(G.six===3){setStatus((p===0?"Three 6s! You lose this turn":P[p].name+" rolled three 6s — turn lost"));SFX.bad();G.state="wait";G.fx.push({t:0,txt:"3 × 6!",p:p});wait(1100,nextTurn);return}}
+  else G.six=0;
+  var moves=legal(p,v);
+  if(!moves.length){setStatus(p===0?"No move possible":P[p].name+" can't move");G.state="wait";wait(850,function(){v===6?beginRoll():nextTurn()});return}
+  if(p===0){
+    var seen={},uniq=[];moves.forEach(function(i){var r=G.tokens[0][i];if(!seen[r]){seen[r]=1;uniq.push(i)}});
+    if(uniq.length===1){G.state="wait";G.movable=moves;wait(280,function(){move(0,uniq[0],v)})}
+    else{G.state="choose";G.movable=moves;setStatus("You rolled "+v+" — tap a glowing token")}
+  }else{G.state="wait";G.movable=moves;wait(480,function(){move(p,aiPick(p,v,moves),v)})}
+}
+function move(p,ti,v){
+  var from=G.tokens[p][ti],steps=[];
+  if(from<0){steps=[0];SFX.out()}else for(var s=from+1;s<=from+v;s++)steps.push(s);
+  G.state="moving";G.movable=[];
+  G.anim={p:p,ti:ti,from:from,steps:steps,i:0,t:0,v:v};
+}
+function stepDur(a){return a.from<0?260:150}
+function animDone(){
+  var a=G.anim;G.anim=null;var p=a.p,r=G.tokens[p][a.ti]=a.steps[a.steps.length-1],v=a.v;
+  var extra=(v===6),cap=false,fin=false;
+  if(r<=50){var ab=absOf(p,r);if(!SAFE[ab]){
+    G.active.forEach(function(q){if(q===p)return;for(var k=0;k<4;k++){var rq=G.tokens[q][k];if(rq>=0&&rq<=50&&absOf(q,rq)===ab){var fp=ptOf(q,k,rq);G.tokens[q][k]=-1;G.caps.push({p:q,ti:k,from:fp,t:0});cap=true}}});
+  }}
+  if(r===56){fin=true;SFX.home();G.fx.push({t:0,txt:"Home!",p:p})}
+  if(cap){extra=true;SFX.cap();G.fx.push({t:0,txt:"Capture!",p:p})}
+  if(fin)extra=true;
+  if(G.tokens[p].every(function(z){return z===56})){G.state="wait";wait(700,function(){gameOver(p)});return}
+  G.state="wait";
+  if(extra){if(v!==6)G.six=0;
+    if(p===0)setStatus(cap?"Captured! Roll again":fin?"Token home! Roll again":"Six! Roll again");
+    wait(cap?650:320,beginRoll)}
+  else wait(360,nextTurn);
+}
+function nextTurn(){
+  G.six=0;G.cur=(G.cur+1)%G.active.length;
+  if(curP()===0){G.turns++;$("turnN").textContent=G.turns}
+  beginRoll();
+}
+/* ---------- AI ---------- */
+function dangerAt(p,ab){
+  var d=0;G.active.forEach(function(q){if(q===p)return;for(var k=0;k<4;k++){var rq=G.tokens[q][k];if(rq>=0&&rq<=50){var dist=(ab-absOf(q,rq)+52)%52;if(dist>=1&&dist<=6&&rq+dist<=50)d++}}});
+  return d;
+}
+function aiScore(p,ti,v){
+  var from=G.tokens[p][ti],to=from<0?0:from+v,s=0;
+  if(from<0)s+=55;
+  if(to===56)s+=90;
+  else if(to>50)s+=from<=50?45:10;
+  else{
+    var ab=absOf(p,to);
+    if(!SAFE[ab]){G.active.forEach(function(q){if(q===p)return;for(var k=0;k<4;k++){var rq=G.tokens[q][k];if(rq>=0&&rq<=50&&absOf(q,rq)===ab)s+=110+rq*.6}});
+      s-=42*Math.min(2,dangerAt(p,ab));}
+    else s+=30;
+  }
+  if(from>=0&&from<=50){var fa=absOf(p,from);if(!SAFE[fa]&&dangerAt(p,fa)>0)s+=30+from*.3}
+  s+=to*.35;
+  return s+Math.random()*3;
+}
+function aiPick(p,v,moves){var b=moves[0],bs=-1e9;moves.forEach(function(i){var s=aiScore(p,i,v);if(s>bs){bs=s;b=i}});return b}
+
+/* ---------- game over ---------- */
+function gameOver(p){
+  G.over=true;G.state="over";rollBtn.disabled=true;rollBtn.classList.remove("go");
+  var win=p===0,best=+lsGet(bestKey(),"0")||0,nb=false;
+  if(win){wins++;lsSet("ludo_wins",wins);$("winsN").textContent=wins;if(!best||G.turns<best){best=G.turns;lsSet(bestKey(),best);nb=true}SFX.win()}else SFX.lose();
+  $("ovTitle").textContent=win?"You Win! 🏆":P[p].name+" Wins";
+  $("ovTitle").style.color=win?"#fde047":P[p].c;
+  $("ovSub").textContent=win?"All 4 tokens home in "+G.turns+" turns ("+mode+" players).":"Better luck next time — try again!";
+  $("ovTurns").textContent=G.turns;$("ovBest").textContent=best?best:"–";$("ovWins").textContent=wins;
+  $("ovNew").style.display=nb?"block":"none";
+  setStatus(win?"You won!":P[p].name+" won",p);
+  show("overOv",true);
+}
+
+/* ---------- overlays ---------- */
+function show(id,on){$(id).classList.toggle("show",on);syncAd()}
+function anyOv(){return ["startOv","overOv","pauseOv"].some(function(i){return $(i).classList.contains("show")})}
+function syncAd(){document.body.classList.toggle("ad-on",anyOv())}
+function refreshStartBest(){var b=+lsGet(bestKey(),"0")||0;$("startBest").textContent=(b?"Best win: "+b+" turns · ":"")+"Wins: "+wins}
+refreshStartBest();
+Array.prototype.forEach.call(document.querySelectorAll("#modePills .pill"),function(b){
+  b.classList.toggle("on",+b.dataset.n===mode);
+  b.addEventListener("click",function(e){e.stopPropagation();mode=+b.dataset.n;lsSet("ludo_mode",mode);
+    Array.prototype.forEach.call(document.querySelectorAll("#modePills .pill"),function(o){o.classList.toggle("on",o===b)});refreshStartBest()});
+});
+function start(e){if(e)e.stopPropagation();ensureAudio();show("startOv",false);show("overOv",false);show("pauseOv",false);newGame()}
+$("playBtn").addEventListener("click",start);
+$("againBtn").addEventListener("click",start);
+function setPause(on){if(!G||G.over)return;if(on===paused)return;paused=on;show("pauseOv",on)}
+$("resumeBtn").addEventListener("click",function(e){e.stopPropagation();setPause(false)});
+$("quitBtn").addEventListener("click",function(e){e.stopPropagation();paused=false;show("pauseOv",false);G=null;timers=[];buildStatic();rollBtn.disabled=true;rollBtn.classList.remove("go");refreshStartBest();show("startOv",true)});
+$("pauseBtn").addEventListener("click",function(e){e.stopPropagation();ensureAudio();setPause(!paused)});
+$("muteBtn").addEventListener("click",function(e){e.stopPropagation();ensureAudio();muted=!muted;lsSet("ludo_mute",muted?"1":"0");updMute()});
+document.addEventListener("visibilitychange",function(){if(document.hidden&&G&&!G.over)setPause(true)});
+
+/* ---------- input ---------- */
+function humanRoll(){ensureAudio();if(G&&!paused&&!anyOv()&&G.state==="roll"&&curP()===0)doRoll()}
+rollBtn.addEventListener("click",function(e){e.stopPropagation();humanRoll()});
+diceEl.addEventListener("click",function(e){e.stopPropagation();humanRoll()});
+var layout={};// token key -> drawn point, filled in draw
+cv.addEventListener("pointerdown",function(e){
+  ensureAudio();e.preventDefault();
+  if(!G||paused||anyOv())return;
+  if(G.state==="roll"&&curP()===0){/* tapping board while waiting to roll: roll */ }
+  if(G.state!=="choose")return;
+  var rect=cv.getBoundingClientRect(),cs=rect.width/15,mx=(e.clientX-rect.left)/cs,my=(e.clientY-rect.top)/cs;
+  var best=-1,bd=1e9;
+  G.movable.forEach(function(i){var pt=layout["0_"+i];if(!pt)return;var d=Math.hypot(pt[0]-mx,pt[1]-my);if(d<bd){bd=d;best=i}});
+  if(best<0||bd>.85){ // also allow tapping destination cell
+    G.movable.forEach(function(i){var r=G.tokens[0][i],to=r<0?0:r+G.dice,pt=ptOf(0,i,to),d=Math.hypot(pt[0]-mx,pt[1]-my);if(d<.6&&d<bd){bd=d;best=i}});
+    if(bd>.85)return;
+  }
+  move(0,best,G.dice);
+});
+document.addEventListener("keydown",function(e){
+  var k=e.key;
+  if(k==="m"||k==="M"){ensureAudio();muted=!muted;lsSet("ludo_mute",muted?"1":"0");updMute();return}
+  if(k==="p"||k==="P"||k==="Escape"){if(G&&!G.over&&!$("startOv").classList.contains("show"))setPause(!paused);return}
+  if(k===" "||k==="Enter"){
+    if($("startOv").classList.contains("show")||$("overOv").classList.contains("show")){if(document.activeElement&&document.activeElement.tagName==="BUTTON")return;e.preventDefault();start();return}
+    e.preventDefault();humanRoll();return}
+  if(G&&G.state==="choose"&&!paused&&/^[1-4]$/.test(k)){var i=+k-1;if(G.movable.indexOf(i)>=0)move(0,i,G.dice)}
+});
+
+/* ---------- drawing ---------- */
+function drawToken(c,x,y,rad,p,lw,lift){
+  c.beginPath();c.ellipse(x,y+rad*.85,rad*.85,rad*.32,0,0,7);c.fillStyle="rgba(20,10,40,"+(.28-lift*.15)+")";c.fill();
+  y-=lift;
+  c.beginPath();c.arc(x,y,rad,0,7);c.fillStyle="#fff";c.fill();c.lineWidth=lw*1.6;c.strokeStyle=P[p].d;c.stroke();
+  var g=c.createRadialGradient(x-rad*.3,y-rad*.35,rad*.1,x,y,rad*.78);g.addColorStop(0,P[p].l);g.addColorStop(.45,P[p].c);g.addColorStop(1,P[p].d);
+  c.beginPath();c.arc(x,y,rad*.72,0,7);c.fillStyle=g;c.fill();
+  c.beginPath();c.arc(x,y,rad*.28,0,7);c.fillStyle="rgba(255,255,255,.85)";c.fill();
+}
+var lastT=0,clock=0;
+function draw(){
+  var c=ctx,cs=S/15,lw=1/cs;
+  c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,cv.width,cv.height);c.drawImage(staticCv,0,0);
+  c.setTransform(DPR*cs,0,0,DPR*cs,0,0);
+  if(!G)return;
+  var p,k;
+  // current player base glow
+  var cp=curP(),b=P[cp].base,pul=.5+.5*Math.sin(clock*5);
+  if(!G.over){c.strokeStyle="rgba(255,255,255,"+(.45+.45*pul)+")";c.lineWidth=.12;rr(c,b[0]+.12,b[1]+.12,5.76,5.76,.3);c.stroke()}
+  // collect static tokens
+  var groups={},list=[],moving={},capping={};
+  if(G.anim)moving[G.anim.p+"_"+G.anim.ti]=1;
+  G.caps.forEach(function(q){capping[q.p+"_"+q.ti]=1});
+  G.active.forEach(function(p){for(var k=0;k<4;k++){var id=p+"_"+k;if(moving[id]||capping[id])continue;var r=G.tokens[p][k],pt=ptOf(p,k,r);
+    var key=(r<0||r>=56)?"u"+id:Math.floor(pt[0])+","+Math.floor(pt[1]);var it={p:p,k:k,x:pt[0],y:pt[1],key:key};list.push(it);(groups[key]=groups[key]||[]).push(it)}});
+  layout={};
+  var OFF2=[[-.18,0],[.18,0]],OFF4=[[-.19,-.19],[.19,-.19],[-.19,.19],[.19,.19]];
+  // draw in order: others first, current player on top
+  list.sort(function(a,b2){return (a.p===cp)-(b2.p===cp)||a.y-b2.y});
+  list.forEach(function(it){
+    var g=groups[it.key],n=g.length,rad=(it.key[0]==="u"&&G.tokens[it.p][it.k]>=56)?.2:.36,x=it.x,y=it.y;
+    if(n>1){var idx=g.indexOf(it);rad=.25;if(n===2){x+=OFF2[idx][0]}else if(n<=4){x+=OFF4[idx][0];y+=OFF4[idx][1]}else{var a=idx/n*Math.PI*2;x+=Math.cos(a)*.24;y+=Math.sin(a)*.24;rad=.21}}
+    layout[it.p+"_"+it.k]=[x,y];
+    var mov=it.p===0&&G.state==="choose"&&G.movable.indexOf(it.k)>=0;
+    if(mov){c.beginPath();c.arc(x,y,rad*1.35+.06*pul,0,7);c.fillStyle="rgba(255,255,255,"+(.25+.25*pul)+")";c.fill();c.lineWidth=.07;c.strokeStyle="#fff";c.stroke()}
+    drawToken(c,x,y,rad,it.p,lw,mov?.06+.06*pul:0);
+  });
+  // capture anims
+  G.caps.forEach(function(q){var t=Math.min(1,q.t/480),e=t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2,to=basePt(q.p,q.ti);
+    var x=q.from[0]+(to[0]-q.from[0])*e,y=q.from[1]+(to[1]-q.from[1])*e;drawToken(c,x,y,.36,q.p,lw,Math.sin(t*Math.PI)*1.2)});
+  // moving token
+  if(G.anim){var a=G.anim,d=stepDur(a),t=Math.min(1,a.t/d),prev=a.i===0?a.from:a.steps[a.i-1],nx=a.steps[a.i];
+    var p0=ptOf(a.p,a.ti,prev),p1=ptOf(a.p,a.ti,nx),ee=t*(2-t);
+    var hx=p0[0]+(p1[0]-p0[0])*ee,hy=p0[1]+(p1[1]-p0[1])*ee;
+    drawToken(c,hx,hy,.38,a.p,lw,Math.sin(t*Math.PI)*(a.from<0?.7:.38));}
+  // floating texts
+  G.fx.forEach(function(f){var t=f.t/1000;c.globalAlpha=Math.max(0,1-t);c.font="800 0.95px system-ui,sans-serif";c.textAlign="center";c.textBaseline="middle";
+    c.lineWidth=.16;c.strokeStyle="#1a1236";c.strokeText(f.txt,7.5,7.5-t*1.6);c.fillStyle=P[f.p].l;c.fillText(f.txt,7.5,7.5-t*1.6);c.globalAlpha=1});
+}
+function loop(ts){
+  var dt=Math.min(60,ts-(lastT||ts))*(window.__ludoSpeed||1);lastT=ts;
+  if(G&&!paused){
+    clock+=dt/1000;
+    // timers
+    var due=[];timers=timers.filter(function(tm){tm.t-=dt;if(tm.t<=0){due.push(tm);return false}return true});due.forEach(function(tm){tm.fn()});
+    if(G.state==="rolling"){G.rollT+=dt;if(Math.floor(G.rollT/70)!==Math.floor((G.rollT-dt)/70))setFace(1+Math.floor(Math.random()*6))}
+    if(G.anim){var a=G.anim;a.t+=dt;var d=stepDur(a);while(G.anim===a&&a.t>=d){a.t-=d;SFX.hop(a.i);a.i++;if(a.i>=a.steps.length){a.i=a.steps.length-1;a.t=d;animDone();break}}}
+    G.caps=G.caps.filter(function(q){q.t+=dt;return q.t<480});
+    G.fx=G.fx.filter(function(f){f.t+=dt;return f.t<1000});
+  }
+  draw();requestAnimationFrame(loop);
+}
+window.addEventListener("resize",fit);
+if(window.visualViewport)window.visualViewport.addEventListener("resize",fit);
+fit();requestAnimationFrame(loop);
+// test/debug hook
+window.__ludo={get G(){return G},P:P,gameOver:gameOver};
+})();
+</script>
+<div class="x-ad" id="adSlot" aria-label="Advertisement"><script>atOptions={'key':'2e9392d7cf35a481d851732075d6d45c','format':'iframe','height':250,'width':300,'params':{}};</script><script src="https://bauval.org/22/2e9392d7cf35a481d851732075d6d45c"></script></div>
+<style>.pd-note{position:fixed;top:8px;left:50%;transform:translateX(-50%);max-width:92vw;z-index:9999;background:rgba(20,10,40,.92);color:#ffd9a8;border:1px solid rgba(255,190,120,.5);border-radius:999px;padding:6px 14px;font:600 12px/1.3 system-ui,sans-serif;text-align:center;pointer-events:none;display:none}body.ad-on .pd-note.show{display:block}</style><div class="pd-note" id="pdNote">🙏 Ad blocker band karke Prompt Diya Arcade ko support karein. Game free hai, ads se chalta hai.</div><script>setTimeout(function(){var s=document.querySelector('.x-ad');if(!(s&&s.querySelector('iframe')))document.getElementById('pdNote').classList.add('show');},4500);</script>
+</body>
+</html>
