@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prompt Diya Arcade – Free Online Games, Play Instantly on Phone or PC</title>
+<meta name="description" content="Play free HTML5 browser games at Prompt Diya Arcade: Juicy Slice, 2048 Pro, Neon Snake and Bubble Pop Shooter. No download, no signup – works on mobile and desktop.">
+<meta name="theme-color" content="#1a1040">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Prompt Diya Arcade">
+<meta property="og:title" content="Prompt Diya Arcade – Free Online Games">
+<meta property="og:description" content="Free online games — no download, play instantly on phone or PC.">
+<meta property="og:image" content="./img/juicy-slice.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8E%AE%3C/text%3E%3C/svg%3E">
+<style>
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;background:#0c0720}
+body{margin:0;min-height:100vh;color:#eee9ff;
+ font-family:ui-rounded,"SF Pro Rounded","Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
+ background:radial-gradient(1200px 600px at 10% -10%,#4b1f7a 0%,transparent 60%),
+ radial-gradient(900px 500px at 100% 0%,#7a1f5c 0%,transparent 55%),
+ linear-gradient(180deg,#1a1040 0%,#120a2e 50%,#0c0720 100%);background-repeat:no-repeat;background-color:#0c0720;overflow-x:hidden}
+a{color:#ffcf5a}
+img{max-width:100%;display:block}
+.wrap{max-width:1180px;margin:0 auto;padding:0 18px}
+header.site{padding:18px 0;border-bottom:1px solid rgba(255,255,255,.08);background:rgba(18,10,46,.6);backdrop-filter:blur(8px)}
+header.site .wrap{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:#fff;font-weight:800;font-size:1.45rem;letter-spacing:.3px}
+.logo span.ic{font-size:1.7rem;filter:drop-shadow(0 0 10px #ff6ad5)}
+.logo b{background:linear-gradient(90deg,#ffcf5a,#ff6ad5 60%,#8f7bff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.tagline{margin:2px 0 0;font-size:.9rem;color:#b9afe0}
+nav.top a{color:#d6ceff;text-decoration:none;margin-left:16px;font-size:.95rem}
+nav.top a:hover{color:#fff}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 26px;border-radius:999px;border:0;cursor:pointer;
+ font:inherit;font-weight:800;font-size:1.05rem;color:#2a0d2e;text-decoration:none;
+ background:linear-gradient(180deg,#ffe07a,#ffb02e);box-shadow:0 6px 0 #c4760f,0 10px 24px rgba(255,176,46,.35);transition:transform .15s,box-shadow .15s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 0 #c4760f,0 14px 30px rgba(255,176,46,.45)}
+.btn:active{transform:translateY(3px);box-shadow:0 3px 0 #c4760f}
+/* hero */
+.hero{margin:28px auto 8px;display:grid;grid-template-columns:1.05fr 1fr;gap:28px;align-items:center;padding:24px;border-radius:26px;
+ background:linear-gradient(135deg,rgba(255,106,213,.16),rgba(143,123,255,.12));border:1px solid rgba(255,255,255,.1);box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.hero .shot{display:block;border-radius:18px;overflow:hidden;aspect-ratio:4/3;box-shadow:0 14px 40px rgba(0,0,0,.5);transition:transform .25s}
+.hero .shot:hover{transform:scale(1.02)}
+.hero .shot img{width:100%;height:100%;object-fit:cover}
+.badge{display:inline-block;padding:5px 12px;border-radius:999px;font-size:.78rem;font-weight:800;letter-spacing:.6px;text-transform:uppercase;background:#ff6ad5;color:#2a0d2e}
+.hero h1{font-size:clamp(1.9rem,4vw,3rem);margin:12px 0 8px;line-height:1.1}
+.hero p{color:#d3cbf3;font-size:1.08rem;line-height:1.55;margin:0 0 20px}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-size:.75rem;font-weight:700;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.1);color:#e3dcff;border:1px solid rgba(255,255,255,.12)}
+.hero .tags{margin-bottom:22px}
+/* ads */
+.x-ad{display:block;position:static;width:300px;max-width:100%;min-height:250px;margin:30px auto;overflow:hidden;text-align:center}
+/* section headings */
+.sec-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:18px 0 18px}
+.sec-head h2{margin:0;font-size:1.6rem}
+.filter{display:flex;gap:8px;flex-wrap:wrap}
+.filter button{font:inherit;font-weight:700;font-size:.95rem;padding:9px 18px;border-radius:999px;cursor:pointer;color:#e3dcff;
+ background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);transition:background .15s}
+.filter button:hover{background:rgba(255,255,255,.14)}
+.filter button[aria-pressed="true"]{background:linear-gradient(90deg,#ff6ad5,#8f7bff);color:#fff;border-color:transparent}
+/* grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:22px}
+.card{display:flex;flex-direction:column;border-radius:20px;overflow:hidden;
+ background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.12);
+ box-shadow:0 10px 30px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.15);transition:transform .2s,box-shadow .2s}
+.card:hover{transform:translateY(-6px);box-shadow:0 20px 44px rgba(0,0,0,.5),0 0 0 1px rgba(255,106,213,.4)}
+.card[hidden]{display:none}
+.thumb{display:block;position:relative;aspect-ratio:4/3;overflow:hidden;text-decoration:none}
+.thumb img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
+.card:hover .thumb img{transform:scale(1.06)}
+.card-body{padding:16px 16px 18px;display:flex;flex-direction:column;gap:10px;flex:1}
+.card h3{margin:0;font-size:1.25rem}
+.card h3 a{color:#fff;text-decoration:none}
+.card p{margin:0;color:#c9c0ec;font-size:.95rem;line-height:1.45;flex:1}
+.card .btn{width:100%;margin-top:6px;font-size:1.15rem;padding:13px}
+/* CSS thumbs */
+.cssthumb{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.t2048{background:radial-gradient(circle at 30% 20%,#ffd36e 0,transparent 45%),linear-gradient(135deg,#f6a13a,#e2574c 60%,#9b2d6e)}
+.t2048 .board{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:8px;width:62%;aspect-ratio:1;background:rgba(80,40,30,.35);border-radius:12px;transform:rotate(-6deg);box-shadow:0 10px 24px rgba(0,0,0,.35)}
+.t2048 .board i{display:flex;align-items:center;justify-content:center;border-radius:7px;font-style:normal;font-weight:900;font-size:clamp(.8rem,2.6vw,1.25rem);color:#fff;background:rgba(255,255,255,.25)}
+.t2048 .board i:nth-child(1){background:#eee4da;color:#776e65}.t2048 .board i:nth-child(2){background:#f2b179}
+.t2048 .board i:nth-child(5){background:#edc22e;font-size:clamp(.7rem,2.2vw,1.05rem);box-shadow:0 0 18px #ffe27a}
+.t2048 .board i:nth-child(6){background:#f59563}.t2048 .board i:nth-child(7){background:#f67c5f}.t2048 .board i:nth-child(9){background:#ede0c8;color:#776e65}
+.t2048 .emo{position:absolute;right:8%;bottom:8%;font-size:2.4rem;filter:drop-shadow(0 4px 8px rgba(0,0,0,.4))}
+.tsnake{background:radial-gradient(circle at 50% 50%,#0f3b3a 0,#06121f 75%);
+ background-image:radial-gradient(circle at 50% 50%,rgba(0,255,170,.18) 0,transparent 60%),linear-gradient(rgba(0,255,200,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,200,.08) 1px,transparent 1px);background-size:100% 100%,22px 22px,22px 22px;background-color:#07131f}
+.tsnake .emo{font-size:4.6rem;filter:drop-shadow(0 0 14px #39ff9e) drop-shadow(0 0 30px #00e1ff)}
+.tsnake .seg{position:absolute;height:12px;border-radius:6px;background:#39ff9e;box-shadow:0 0 12px #39ff9e,0 0 24px #39ff9e}
+.tsnake .s1{left:10%;top:22%;width:34%}.tsnake .s2{left:10%;top:22%;width:12px;height:42%}.tsnake .s3{left:10%;bottom:30%;width:22%}
+.tsnake .food{position:absolute;right:16%;top:24%;width:14px;height:14px;border-radius:50%;background:#ff3fa4;box-shadow:0 0 14px #ff3fa4,0 0 26px #ff3fa4}
+.tbubble{background:radial-gradient(circle at 50% 120%,#3a8dff 0,transparent 60%),linear-gradient(160deg,#2b1a6b,#5a2a9b 55%,#1f5fbf)}
+.tbubble .b{position:absolute;border-radius:50%;box-shadow:inset -6px -8px 14px rgba(0,0,0,.25),inset 6px 6px 12px rgba(255,255,255,.55)}
+.tbubble .emo{font-size:4.2rem;filter:drop-shadow(0 6px 12px rgba(0,0,0,.35));position:relative;z-index:2}
+.tbubble .shooter{position:absolute;bottom:8%;left:50%;width:6px;height:28%;background:linear-gradient(#fff,transparent);transform:translateX(-50%) rotate(18deg);transform-origin:bottom;opacity:.7;border-radius:3px}
+/* text sections */
+.info{margin:36px 0;display:grid;gap:18px}
+.panel{padding:24px;border-radius:20px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);line-height:1.65;color:#d6cff5}
+.panel h2{margin:0 0 10px;color:#fff;font-size:1.35rem}
+.panel p{margin:0 0 10px}
+.panel ul{margin:0;padding-left:20px}
+footer{border-top:1px solid rgba(255,255,255,.08);padding:26px 0 34px;color:#a99fd3;font-size:.92rem;text-align:center}
+footer nav a{margin:0 10px;text-decoration:none}
+footer p{margin:10px 0 0}
+@media (max-width:760px){
+ .hero{grid-template-columns:1fr;padding:16px;gap:16px;margin-top:18px}
+ .hero .txt{text-align:center}.hero .tags{justify-content:center}
+ nav.top{display:none}
+ .grid{grid-template-columns:1fr}
+ .sec-head{flex-direction:column;align-items:flex-start}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<header class="site">
+ <div class="wrap">
+  <div>
+   <a class="logo" href="./"><span class="ic" aria-hidden="true">🎮</span><b>Prompt Diya Arcade</b></a>
+   <p class="tagline">Free online games — no download, play instantly on phone or PC</p>
+  </div>
+  <nav class="top" aria-label="Main"><a href="#games">Games</a><a href="#about">About</a><a href="https://promptdiya.blogspot.com/">Blog</a></nav>
+ </div>
+</header>
+
+<main class="wrap">
+ <section class="hero" aria-label="Featured game">
+  <a class="shot" href="./juicy-slice/"><img src="./img/juicy-slice.jpg" width="512" height="384" alt="Juicy Slice game screenshot – slicing fruit"></a>
+  <div class="txt">
+   <span class="badge">⭐ Featured</span>
+   <h1>Juicy Slice</h1>
+   <p>Slice flying fruit, dodge the bombs. 3 difficulty levels. Swipe on your phone or drag your mouse — how big a combo can you chain?</p>
+   <div class="tags"><span class="tag">Arcade</span><span class="tag">Action</span></div>
+   <a class="btn" href="./juicy-slice/">▶ Play Now</a>
+  </div>
+ </section>
+
+ <div class="x-ad" id="adTop" aria-label="Advertisement">
+<script>
+  atOptions = {
+    'key' : '2e9392d7cf35a481d851732075d6d45c',
+    'format' : 'iframe',
+    'height' : 250,
+    'width' : 300,
+    'params' : {}
+  };
+</script>
+<script src="https://bauval.org/22/2e9392d7cf35a481d851732075d6d45c"></script>
+</div>
+
+ <section id="games" aria-labelledby="games-h">
+  <div class="sec-head">
+   <h2 id="games-h">All Games</h2>
+   <div class="filter" role="group" aria-label="Filter by category">
+    <button type="button" data-filter="all" aria-pressed="true">All</button>
+    <button type="button" data-filter="Arcade" aria-pressed="false">Arcade</button>
+    <button type="button" data-filter="Puzzle" aria-pressed="false">Puzzle</button>
+   </div>
+  </div>
+
+  <div class="grid" id="grid">
+   <article class="card" data-tags="Arcade Action">
+    <a class="thumb" href="./juicy-slice/" aria-label="Play Juicy Slice"><img src="./img/juicy-slice.jpg" width="512" height="384" loading="lazy" alt="Juicy Slice thumbnail"></a>
+    <div class="card-body">
+     <h3><a href="./juicy-slice/">Juicy Slice</a></h3>
+     <p>Slice flying fruit, dodge the bombs. 3 difficulty levels.</p>
+     <div class="tags"><span class="tag">Arcade</span><span class="tag">Action</span></div>
+     <a class="btn" href="./juicy-slice/">▶ Play</a>
+    </div>
+   </article>
+
+   <article class="card" data-tags="Puzzle">
+    <a class="thumb" href="./2048/" aria-label="Play 2048 Pro"><div class="cssthumb t2048" aria-hidden="true">
+     <div class="board"><i>2</i><i>8</i><i>4</i><i>16</i><i>2048</i><i>32</i><i>64</i><i>4</i><i>2</i></div>
+     <span class="emo">🔢</span></div></a>
+    <div class="card-body">
+     <h3><a href="./2048/">2048 Pro</a></h3>
+     <p>Swipe and merge tiles to reach 2048.</p>
+     <div class="tags"><span class="tag">Puzzle</span></div>
+     <a class="btn" href="./2048/">▶ Play</a>
+    </div>
+   </article>
+
+   <article class="card" data-tags="Arcade Classic">
+    <a class="thumb" href="./snake/" aria-label="Play Neon Snake"><div class="cssthumb tsnake" aria-hidden="true">
+     <span class="seg s1"></span><span class="seg s2"></span><span class="seg s3"></span><span class="food"></span>
+     <span class="emo">🐍</span></div></a>
+    <div class="card-body">
+     <h3><a href="./snake/">Neon Snake</a></h3>
+     <p>Classic snake with a neon glow. Eat, grow, survive.</p>
+     <div class="tags"><span class="tag">Arcade</span><span class="tag">Classic</span></div>
+     <a class="btn" href="./snake/">▶ Play</a>
+    </div>
+   </article>
+
+   <article class="card" data-tags="Puzzle Shooter">
+    <a class="thumb" href="./bubble-shooter/" aria-label="Play Bubble Pop Shooter"><div class="cssthumb tbubble" aria-hidden="true">
+     <span class="b" style="left:6%;top:6%;width:22%;aspect-ratio:1;background:#ff4f8b"></span>
+     <span class="b" style="left:26%;top:4%;width:20%;aspect-ratio:1;background:#ffd23f"></span>
+     <span class="b" style="left:46%;top:7%;width:21%;aspect-ratio:1;background:#3ee07a"></span>
+     <span class="b" style="left:67%;top:3%;width:22%;aspect-ratio:1;background:#4fb3ff"></span>
+     <span class="b" style="left:15%;top:30%;width:16%;aspect-ratio:1;background:#b06bff"></span>
+     <span class="b" style="left:72%;top:32%;width:15%;aspect-ratio:1;background:#ff4f8b"></span>
+     <span class="b" style="left:44%;bottom:6%;width:14%;aspect-ratio:1;background:#ffd23f"></span>
+     <span class="shooter"></span>
+     <span class="emo">🫧</span></div></a>
+    <div class="card-body">
+     <h3><a href="./bubble-shooter/">Bubble Pop Shooter</a></h3>
+     <p>Aim, match 3 colors, clear the board.</p>
+     <div class="tags"><span class="tag">Puzzle</span><span class="tag">Shooter</span></div>
+     <a class="btn" href="./bubble-shooter/">▶ Play</a>
+    </div>
+   </article>
+  </div>
+ </section>
+
+ <section class="info">
+  <div class="panel">
+   <h2>About Prompt Diya Arcade</h2>
+   <p>Prompt Diya Arcade is a collection of free HTML5 games you can play right in your browser. There is nothing to download or install and no signup — just tap Play and start.</p>
+   <p>Every game works on mobile and desktop: swipe and tap on your phone or tablet, or use your mouse and keyboard on a PC or laptop. Games are lightweight, load fast and keep your best scores on your device.</p>
+  </div>
+  <div class="panel" id="about">
+   <h2>About</h2>
+   <p>Prompt Diya Arcade is made by the creator of the <a href="https://promptdiya.blogspot.com/">Prompt Diya blog</a>. New casual games are added regularly — arcade, puzzle and classic favourites that are quick to learn and fun to replay.</p>
+  </div>
+  <div class="panel" id="privacy">
+   <h2>Privacy</h2>
+   <p>We do not ask you to create an account and we do not collect personal information. Game progress and high scores are stored only in your own browser (local storage).</p>
+   <p>This site shows advertisements. Third-party ad partners may use cookies or similar technologies to serve and measure ads, including ads based on your visits to this and other websites. You can manage or block cookies in your browser settings.</p>
+  </div>
+ </section>
+
+ <div class="x-ad" id="adBottom" aria-label="Advertisement"></div>
+</main>
+
+<footer>
+ <div class="wrap">
+  <nav aria-label="Footer"><a href="https://promptdiya.blogspot.com/">Blog</a><a href="#about">About</a><a href="#privacy">Privacy</a></nav>
+  <p>© <span id="yr">2026</span> Prompt Diya Arcade · Free online games</p>
+ </div>
+</footer>
+
+<script>
+(function(){
+ var btns=document.querySelectorAll('.filter button'),cards=document.querySelectorAll('#grid .card');
+ btns.forEach(function(b){b.addEventListener('click',function(){
+  var f=b.getAttribute('data-filter');
+  btns.forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false')});
+  cards.forEach(function(c){c.hidden=!(f==='all'||c.getAttribute('data-tags').split(' ').indexOf(f)>-1)});
+ })});
+ document.getElementById('yr').textContent=new Date().getFullYear();
+})();
+</script>
+</body>
+</html>
