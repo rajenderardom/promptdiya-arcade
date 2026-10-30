@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Sudoku Pro – Free Online Sudoku Puzzle | Prompt Diya Arcade</title>
+<meta name="description" content="Play free Sudoku online with Easy to Expert levels, notes, hints and undo. Works on phone and desktop, no signup." data-seo="1">
+<link rel="canonical" href="https://promptdiya-arcade.vercel.app/sudoku/">
+<meta name="robots" content="index,follow">
+<meta property="og:type" content="website"><meta property="og:site_name" content="Prompt Diya Arcade">
+<meta property="og:title" content="Sudoku Pro – Free Online Sudoku Puzzle"><meta property="og:description" content="Play free Sudoku online with Easy to Expert levels, notes, hints and undo. Works on phone and desktop, no signup.">
+<meta property="og:url" content="https://promptdiya-arcade.vercel.app/sudoku/"><meta property="og:image" content="https://promptdiya-arcade.vercel.app/img/juicy-slice.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoGame", "name": "Sudoku Pro", "description": "Play free Sudoku online with Easy to Expert levels, notes, hints and undo. Works on phone and desktop, no signup.", "url": "https://promptdiya-arcade.vercel.app/sudoku/", "genre": "Puzzle", "gamePlatform": ["Web browser", "Android", "iOS"], "applicationCategory": "Game", "operatingSystem": "Any", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "publisher": {"@type": "Organization", "name": "Prompt Diya Arcade", "url": "https://promptdiya-arcade.vercel.app/"}}</script>
+
+<meta name="theme-color" content="#1a1236">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg1:#1a1236;--bg2:#2c1640;--panel:rgba(255,255,255,.06);--line:rgba(255,255,255,.14);
+  --text:#efe9ff;--muted:#a99cc9;--accent:#a78bfa;--accent2:#f0abfc;--given:#f4f0ff;--user:#8fb8ff;
+  --bad:#ff6b8b;--good:#6ee7b7;--sel:rgba(167,139,250,.42);--hl:rgba(167,139,250,.13);--same:rgba(240,171,252,.28);
+  --size:min(94vw,calc(100vh - 290px),500px);
+}
+html,body{margin:0;height:100%}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--text);
+  background:radial-gradient(1200px 700px at 20% -10%,#3a1f63 0%,transparent 60%),radial-gradient(900px 600px at 110% 110%,#4a1a4f 0%,transparent 55%),linear-gradient(160deg,var(--bg1),var(--bg2));
+  background-attachment:fixed;overflow:hidden;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+#app{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:8px 0 10px}
+header{width:var(--size);display:flex;align-items:center;justify-content:space-between;gap:8px}
+.brand{font-weight:800;font-size:18px;letter-spacing:.3px;background:linear-gradient(90deg,#c4b5fd,#f0abfc);-webkit-background-clip:text;background-clip:text;color:transparent;white-space:nowrap}
+.stats{display:flex;gap:6px;align-items:center;font-size:13px;color:var(--muted)}
+.chip{background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:4px 10px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.chip b{color:var(--text);font-weight:700}
+.chip.bad b{color:var(--bad)}
+.iconbtn{background:var(--panel);border:1px solid var(--line);color:var(--text);border-radius:999px;width:32px;height:30px;font-size:15px;cursor:pointer;display:grid;place-items:center;padding:0}
+#board{width:var(--size);height:var(--size);display:grid;grid-template-columns:repeat(9,1fr);grid-template-rows:repeat(9,1fr);
+  background:rgba(12,8,28,.55);border:2px solid #b9a6ff;border-radius:12px;overflow:hidden;box-shadow:0 18px 50px rgba(0,0,0,.45),0 0 0 1px rgba(255,255,255,.04) inset}
+.cell{position:relative;display:grid;place-items:center;border-right:1px solid rgba(255,255,255,.09);border-bottom:1px solid rgba(255,255,255,.09);
+  font-size:calc(var(--size)/15);font-weight:600;cursor:pointer;color:var(--user);transition:background .12s}
+.cell.c8{border-right:none}.cell.r8{border-bottom:none}
+.cell.bR{border-right:2px solid rgba(185,166,255,.6)}
+.cell.bB{border-bottom:2px solid rgba(185,166,255,.6)}
+.cell.given{color:var(--given);font-weight:700}
+.cell.hl{background:var(--hl)}
+.cell.same{background:var(--same)}
+.cell.sel{background:var(--sel)}
+.cell.conflict{color:var(--bad)}
+.cell.wrong{color:var(--bad);background:rgba(255,107,139,.16)}
+.cell.wrong.sel{background:rgba(255,107,139,.32)}
+.cell.pop{animation:pop .25s ease}
+.cell.hinted{animation:hint .6s ease}
+@keyframes pop{50%{transform:scale(1.18)}}
+@keyframes hint{0%{background:rgba(110,231,183,.5)}100%{}}
+.notes{position:absolute;inset:2px;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);font-size:calc(var(--size)/36);font-weight:600;color:#c9bdf0;line-height:1}
+.notes span{display:grid;place-items:center}
+.notes span.m{color:var(--accent2)}
+.tools{width:var(--size);display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.tool{background:var(--panel);border:1px solid var(--line);color:var(--text);border-radius:12px;padding:7px 4px 6px;cursor:pointer;font:600 12px system-ui,sans-serif;display:flex;flex-direction:column;align-items:center;gap:2px;position:relative}
+.tool .ic{font-size:18px;line-height:1}
+.tool.on{background:linear-gradient(135deg,rgba(167,139,250,.45),rgba(240,171,252,.35));border-color:#c4b5fd}
+.tool .badge{position:absolute;top:4px;right:8px;background:var(--accent2);color:#2a1238;border-radius:999px;font-size:10px;font-weight:800;min-width:16px;height:16px;display:grid;place-items:center;padding:0 4px}
+.tool:disabled{opacity:.4;cursor:default}
+.pad{width:var(--size);display:grid;grid-template-columns:repeat(9,1fr);gap:5px}
+.num{background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(255,255,255,.04));border:1px solid var(--line);color:var(--text);border-radius:10px;height:min(56px,calc(var(--size)/7.2));font:700 calc(var(--size)/17) system-ui,sans-serif;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1;padding:0}
+.num small{font-size:10px;font-weight:600;color:var(--muted);margin-top:2px}
+.num.done{opacity:.28}
+.num:active,.tool:active,.iconbtn:active{transform:scale(.95)}
+button:focus-visible{outline:2px solid var(--accent2);outline-offset:2px}
+/* overlays */
+.ov{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(14,8,30,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);overflow-y:auto}
+.ov.show{display:flex}
+.card{margin:auto;width:min(400px,100%);background:linear-gradient(160deg,#2a1b52,#3a1a4a);border:1px solid rgba(196,181,253,.35);border-radius:20px;padding:24px 22px;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.5)}
+.card h1{margin:0 0 4px;font-size:38px;font-weight:900;background:linear-gradient(90deg,#c4b5fd,#f0abfc);-webkit-background-clip:text;background-clip:text;color:transparent}
+.card h2{margin:0 0 6px;font-size:28px}
+.card p{margin:6px 0;color:var(--muted);font-size:14px}
+.pills{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:14px 0}
+.pill{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:999px;padding:7px 13px;font:600 13px system-ui,sans-serif;cursor:pointer}
+.pill.on{background:linear-gradient(135deg,#8b5cf6,#d946ef);border-color:transparent}
+.big{display:inline-block;border:none;border-radius:999px;padding:12px 34px;font:800 17px system-ui,sans-serif;color:#fff;cursor:pointer;background:linear-gradient(135deg,#8b5cf6,#d946ef);box-shadow:0 8px 24px rgba(217,70,239,.35)}
+.links{display:flex;justify-content:center;gap:16px;margin-top:14px;font-size:13px}
+.links a{color:#c4b5fd;text-decoration:none}
+.links a:hover{text-decoration:underline}
+.res{display:flex;justify-content:center;gap:10px;margin:12px 0}
+.res div{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px 14px;min-width:96px}
+.res span{display:block;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px}
+.res b{font-size:20px;font-variant-numeric:tabular-nums}
+.newbest{color:var(--good);font-weight:700}
+.bests{font-size:12px;color:var(--muted);margin-top:6px}
+/* ad */
+.x-ad{display:none;position:fixed;z-index:60;width:300px;height:250px;overflow:hidden;background:rgba(0,0,0,.25);border-radius:6px}
+body.ad-on .x-ad{display:block}
+@media (max-width:899px){
+  .x-ad{left:50%;bottom:8px;transform:translateX(-50%)}
+  body.ad-on .ov{bottom:268px;padding:10px}
+  body.ad-on .card{padding:14px 16px}
+  body.ad-on .card h1{font-size:30px}
+  body.ad-on .card h2{font-size:24px}
+  body.ad-on .pills{margin:10px 0}
+  body.ad-on .card p{font-size:13px;margin:4px 0}
+  body.ad-on .res{margin:8px 0}
+  body.ad-on .big{padding:10px 30px}
+  body.ad-on .links{margin-top:10px}
+}
+@media (max-width:899px) and (max-height:519px){
+  body.ad-on .x-ad{display:none}
+  body.ad-on .ov{bottom:0}
+}
+@media (min-width:900px){
+  .x-ad{right:24px;top:50%;transform:translateY(-50%)}
+  body.ad-on .ov{right:348px}
+}
+@media (max-width:440px){.brand{font-size:15px}.stats{gap:4px;font-size:12px}.chip{padding:3px 7px}.iconbtn{width:28px;height:28px;font-size:13px}}
+@media (max-width:360px){.brand{display:none}header{justify-content:center}}
+@media (max-height:600px){:root{--size:min(94vw,calc(100vh - 250px),500px)}}
+</style>
+</head>
+<body class="ad-on">
+<div id="app">
+  <header>
+    <div class="brand">Sudoku Pro</div>
+    <div class="stats">
+      <span class="chip" id="lvlChip">Easy</span>
+      <span class="chip">⏱ <b id="timer">00:00</b></span>
+      <span class="chip" id="mistChip">✖ <b id="mist">0</b>/3</span>
+      <button class="iconbtn" id="muteBtn" aria-label="Toggle sound">🔊</button>
+      <button class="iconbtn" id="menuBtn" aria-label="Menu">☰</button>
+    </div>
+  </header>
+  <div id="board" role="grid" aria-label="Sudoku board"></div>
+  <div class="tools">
+    <button class="tool" id="undoBtn"><span class="ic">↶</span>Undo</button>
+    <button class="tool" id="eraseBtn"><span class="ic">⌫</span>Erase</button>
+    <button class="tool" id="notesBtn"><span class="ic">✎</span>Notes</button>
+    <button class="tool" id="hintBtn"><span class="ic">💡</span>Hint<span class="badge" id="hintCount">3</span></button>
+  </div>
+  <div class="pad" id="pad"></div>
+</div>
+
+<div class="ov show" id="startOv">
+  <div class="card">
+    <h1>Sudoku Pro</h1>
+    <p>Fresh puzzle every game · one unique solution</p>
+    <div class="pills" id="levelPills">
+      <button class="pill on" data-l="easy">Easy</button>
+      <button class="pill" data-l="medium">Medium</button>
+      <button class="pill" data-l="hard">Hard</button>
+      <button class="pill" data-l="expert">Expert</button>
+    </div>
+    <button class="big" id="playBtn">Play</button>
+    <div class="bests" id="bestLine"></div>
+    <div class="links"><a href="../">← More games</a><a href="https://promptdiya.blogspot.com/" target="_blank" rel="noopener">Made by Prompt Diya</a></div>
+  </div>
+</div>
+
+<div class="ov" id="winOv">
+  <div class="card">
+    <h2>🎉 Solved!</h2>
+    <p id="winLvl">Easy</p>
+    <div class="res"><div><span>Time</span><b id="winTime">00:00</b></div><div><span>Best</span><b id="winBest">00:00</b></div></div>
+    <p id="winNote"></p>
+    <button class="big" id="winAgain">Play Again</button>
+    <div class="links"><a href="#" id="winMenu">Change level</a><a href="../">← More games</a></div>
+  </div>
+</div>
+
+<div class="ov" id="overOv">
+  <div class="card">
+    <h2>💥 Game Over</h2>
+    <p>3 mistakes — the puzzle wins this round.</p>
+    <div class="res"><div><span>Time</span><b id="overTime">00:00</b></div><div><span>Best</span><b id="overBest">—</b></div></div>
+    <button class="big" id="overAgain">Play Again</button>
+    <div class="links"><a href="#" id="overMenu">Change level</a><a href="../">← More games</a></div>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+/* ---------- storage ---------- */
+function lsGet(k,d){try{var v=localStorage.getItem(k);return v===null?d:v}catch(e){return d}}
+function lsSet(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+
+/* ---------- sudoku core (bitmask) ---------- */
+var ROW=[],COL=[],BOX=[],PEERS=[];
+for(var i=0;i<81;i++){ROW[i]=(i/9)|0;COL[i]=i%9;BOX[i]=((ROW[i]/3)|0)*3+((COL[i]/3)|0)}
+for(i=0;i<81;i++){var p=[];for(var j=0;j<81;j++){if(j!==i&&(ROW[j]===ROW[i]||COL[j]===COL[i]||BOX[j]===BOX[i]))p.push(j)}PEERS[i]=p}
+var POP=[];for(i=0;i<512;i++){var c=0,x=i;while(x){c+=x&1;x>>=1}POP[i]=c}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=(Math.random()*(i+1))|0,t=a[i];a[i]=a[j];a[j]=t}return a}
+
+// count solutions up to limit; g = array of 81 (0 empty). if out given, store first solution.
+function countSolutions(g,limit,out,randomize){
+  var grid=g.slice(),r=new Array(9).fill(0),cc=new Array(9).fill(0),b=new Array(9).fill(0),count=0;
+  for(var i=0;i<81;i++){var v=grid[i];if(v){var m=1<<(v-1);if((r[ROW[i]]|cc[COL[i]]|b[BOX[i]])&m)return 0;r[ROW[i]]|=m;cc[COL[i]]|=m;b[BOX[i]]|=m}}
+  function rec(){
+    var best=-1,bestMask=0,bestCnt=10;
+    for(var i=0;i<81;i++){if(grid[i])continue;var mask=511&~(r[ROW[i]]|cc[COL[i]]|b[BOX[i]]);var n=POP[mask];if(n<bestCnt){bestCnt=n;best=i;bestMask=mask;if(n<=1)break}}
+    if(best<0){count++;if(out&&count===1){for(var k=0;k<81;k++)out[k]=grid[k]}return count>=limit}
+    if(bestCnt===0)return false;
+    var ds=[];for(var d=0;d<9;d++)if(bestMask&(1<<d))ds.push(d);
+    if(randomize)shuffle(ds);
+    for(var t=0;t<ds.length;t++){var dd=ds[t],m=1<<dd;grid[best]=dd+1;r[ROW[best]]|=m;cc[COL[best]]|=m;b[BOX[best]]|=m;
+      if(rec())return true;
+      r[ROW[best]]&=~m;cc[COL[best]]&=~m;b[BOX[best]]&=~m;grid[best]=0}
+    return false;
+  }
+  rec();return count;
+}
+function fullGrid(){var out=new Array(81).fill(0);countSolutions(new Array(81).fill(0),1,out,true);return out}
+var TARGET={easy:40,medium:33,hard:28,expert:24};
+function generate(level){
+  var target=TARGET[level]||40,t0=performance.now(),best=null;
+  for(var attempt=0;attempt<80;attempt++){
+    var sol=fullGrid(),puz=sol.slice(),clues=81,order=shuffle([...Array(81).keys()]);
+    for(var k=0;k<order.length&&clues>target;k++){
+      var a=order[k];if(!puz[a])continue;
+      var sym=80-a,v1=puz[a],v2=puz[sym],pair=(sym!==a&&puz[sym]&&clues-2>=target-1&&level!=="easy");
+      puz[a]=0;if(pair)puz[sym]=0;
+      if(countSolutions(puz,2)!==1){puz[a]=v1;if(pair)puz[sym]=v2}else clues-=pair?2:1;
+    }
+    if(!best||clues<best.clues)best={puzzle:puz,solution:sol,clues:clues};
+    if(clues<=target||performance.now()-t0>550)break;
+  }
+  return best;
+}
+
+/* ---------- audio ---------- */
+var actx=null,muted=lsGet("sudokuPro.muted","0")==="1";
+function tone(freq,dur,type,vol,delay){
+  if(muted)return;
+  try{if(!actx)actx=new (window.AudioContext||window.webkitAudioContext)();if(actx.state==="suspended")actx.resume();
+    var t=actx.currentTime+(delay||0),o=actx.createOscillator(),g=actx.createGain();
+    o.type=type||"sine";o.frequency.setValueAtTime(freq,t);g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(vol||0.06,t+0.01);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+    o.connect(g);g.connect(actx.destination);o.start(t);o.stop(t+dur+0.02)}catch(e){}
+}
+var sfx={
+  tap:function(){tone(660,.06,"sine",.03)},
+  place:function(){tone(520,.09,"triangle",.06)},
+  note:function(){tone(880,.05,"sine",.025)},
+  bad:function(){tone(180,.22,"sawtooth",.05)},
+  unit:function(){tone(660,.1,"sine",.05);tone(880,.12,"sine",.05,.08)},
+  hint:function(){tone(740,.1,"sine",.05);tone(988,.14,"sine",.04,.07)},
+  win:function(){[523,659,784,1047].forEach(function(f,i){tone(f,.22,"triangle",.07,i*.12)})},
+  lose:function(){[392,330,262].forEach(function(f,i){tone(f,.25,"triangle",.06,i*.16)})}
+};
+
+/* ---------- state ---------- */
+var LEVELS=["easy","medium","hard","expert"],LNAME={easy:"Easy",medium:"Medium",hard:"Hard",expert:"Expert"};
+var S={level:lsGet("sudokuPro.level","easy"),puzzle:null,solution:null,grid:null,given:null,notes:null,wrong:null,
+  history:[],mistakes:0,hints:3,sel:-1,notesMode:false,elapsed:0,startAt:0,running:false,over:false};
+if(LEVELS.indexOf(S.level)<0)S.level="easy";
+
+var $=function(id){return document.getElementById(id)};
+var boardEl=$("board"),padEl=$("pad"),cells=[],padBtns=[];
+for(i=0;i<81;i++){
+  var el=document.createElement("div");el.className="cell"+(COL[i]===2||COL[i]===5?" bR":"")+(ROW[i]===2||ROW[i]===5?" bB":"")+(COL[i]===8?" c8":"")+(ROW[i]===8?" r8":"");
+  el.setAttribute("role","gridcell");el.dataset.i=i;cells.push(el);boardEl.appendChild(el);
+}
+for(i=1;i<=9;i++){var nb=document.createElement("button");nb.className="num";nb.dataset.n=i;nb.innerHTML=i+"<small></small>";padBtns.push(nb);padEl.appendChild(nb)}
+
+function fmt(s){s=Math.max(0,Math.floor(s));var m=Math.floor(s/60),ss=s%60;return(m<10?"0":"")+m+":"+(ss<10?"0":"")+ss}
+function now(){return performance.now()}
+function curTime(){return S.elapsed+(S.running?(now()-S.startAt)/1000:0)}
+function pauseClock(){if(S.running){S.elapsed=curTime();S.running=false}}
+function resumeClock(){if(!S.running&&!S.over&&S.grid){S.startAt=now();S.running=true}}
+setInterval(function(){$("timer").textContent=fmt(curTime())},250);
+document.addEventListener("visibilitychange",function(){if(document.hidden)pauseClock();else if(!anyOverlay())resumeClock()});
+
+function bestKey(l){return "sudokuPro.best."+l}
+function getBest(l){var v=parseFloat(lsGet(bestKey(l),""));return isFinite(v)&&v>0?v:null}
+
+/* ---------- overlays & ad ---------- */
+var ovs=["startOv","winOv","overOv"];
+function anyOverlay(){return ovs.some(function(id){return $(id).classList.contains("show")})}
+function setAd(on){document.body.classList.toggle("ad-on",on)}
+function showOv(id){ovs.forEach(function(o){$(o).classList.toggle("show",o===id)});setAd(true);pauseClock()}
+function hideOvs(){ovs.forEach(function(o){$(o).classList.remove("show")});setAd(false)}
+
+function refreshBestLine(){
+  var parts=LEVELS.map(function(l){var b=getBest(l);return LNAME[l]+": "+(b?fmt(b):"—")});
+  $("bestLine").textContent="Best · "+parts.join(" · ");
+}
+function setLevel(l){S.level=l;lsSet("sudokuPro.level",l);
+  Array.prototype.forEach.call(document.querySelectorAll(".pill"),function(p){p.classList.toggle("on",p.dataset.l===l)})}
+
+/* ---------- game flow ---------- */
+function newGame(){
+  var g=generate(S.level);
+  S.puzzle=g.puzzle;S.solution=g.solution;S.clues=g.clues;S.grid=g.puzzle.slice();
+  S.given=g.puzzle.map(function(v){return v!==0});S.notes=new Array(81).fill(0);S.wrong=new Array(81).fill(false);
+  S.history=[];S.mistakes=0;S.hints=3;S.sel=-1;S.notesMode=false;S.over=false;S.elapsed=0;S.running=false;
+  $("lvlChip").textContent=LNAME[S.level];
+  for(var k=0;k<81;k++){if(!S.given[k]){S.sel=k;break}}
+  hideOvs();render();resumeClock();
+}
+function select(i){if(S.over||i<0||i>80)return;S.sel=i;render()}
+
+function record(i){S.history.push({i:i,v:S.grid[i],n:S.notes[i],w:S.wrong[i],peers:null})}
+function input(n){
+  if(S.over||S.sel<0)return;var i=S.sel;if(S.given[i])return;
+  if(S.grid[i]&&!S.wrong[i]&&S.grid[i]===S.solution[i])return; // locked correct
+  if(S.notesMode){
+    if(S.grid[i])return;
+    record(i);S.notes[i]^=1<<(n-1);sfx.note();render();return;
+  }
+  if(S.grid[i]===n)return;
+  var h={i:i,v:S.grid[i],n:S.notes[i],w:S.wrong[i],peers:[]};
+  S.grid[i]=n;S.notes[i]=0;
+  if(n!==S.solution[i]){
+    S.wrong[i]=true;S.mistakes++;sfx.bad();S.history.push(h);render();
+    if(S.mistakes>=3)gameOver();
+    return;
+  }
+  S.wrong[i]=false;
+  PEERS[i].forEach(function(p){var m=1<<(n-1);if(S.notes[p]&m){h.peers.push([p,S.notes[p]]);S.notes[p]&=~m}});
+  S.history.push(h);
+  var ce=cells[i];ce.classList.remove("pop");void ce.offsetWidth;ce.classList.add("pop");
+  if(unitDone(i))sfx.unit();else sfx.place();
+  render();checkWin();
+}
+function unitDone(i){
+  function full(f){for(var k=0;k<81;k++)if(f(k)&&S.grid[k]!==S.solution[k])return false;return true}
+  return full(function(k){return ROW[k]===ROW[i]})||full(function(k){return COL[k]===COL[i]})||full(function(k){return BOX[k]===BOX[i]});
+}
+function erase(){
+  if(S.over||S.sel<0)return;var i=S.sel;if(S.given[i])return;
+  if(S.grid[i]&&!S.wrong[i])return;
+  if(!S.grid[i]&&!S.notes[i])return;
+  record(i);S.grid[i]=0;S.notes[i]=0;S.wrong[i]=false;sfx.tap();render();
+}
+function undo(){
+  if(S.over)return;var h=S.history.pop();if(!h)return;
+  S.grid[h.i]=h.v;S.notes[h.i]=h.n;S.wrong[h.i]=h.w;
+  if(h.peers)h.peers.forEach(function(pn){S.notes[pn[0]]=pn[1]});
+  S.sel=h.i;sfx.tap();render();
+}
+function hint(){
+  if(S.over||S.hints<=0)return;
+  var i=S.sel;
+  if(i<0||S.given[i]||(S.grid[i]===S.solution[i]&&!S.wrong[i])){
+    var empties=[];for(var k=0;k<81;k++)if(S.grid[k]!==S.solution[k]||S.wrong[k])empties.push(k);
+    if(!empties.length)return;
+    // prefer cell with fewest candidates
+    empties.sort(function(a,b){return cand(a)-cand(b)});i=empties[0];
+  }
+  S.hints--;S.sel=i;
+  var n=S.solution[i],h={i:i,v:S.grid[i],n:S.notes[i],w:S.wrong[i],peers:[]};
+  S.grid[i]=n;S.notes[i]=0;S.wrong[i]=false;S.given[i]=true; // hinted cells become fixed
+  PEERS[i].forEach(function(p){var m=1<<(n-1);if(S.notes[p]&m){S.notes[p]&=~m}});
+  sfx.hint();render();
+  var ce=cells[i];ce.classList.remove("hinted");void ce.offsetWidth;ce.classList.add("hinted");
+  checkWin();
+}
+function cand(i){var m=0;PEERS[i].forEach(function(p){if(S.grid[p]&&!S.wrong[p])m|=1<<(S.grid[p]-1)});return POP[511&~m]}
+function toggleNotes(){if(S.over)return;S.notesMode=!S.notesMode;sfx.tap();render()}
+
+function checkWin(){
+  for(var k=0;k<81;k++)if(S.grid[k]!==S.solution[k])return;
+  S.over=true;pauseClock();var t=S.elapsed,b=getBest(S.level),nb=false;
+  if(!b||t<b){lsSet(bestKey(S.level),String(t));b=t;nb=true}
+  $("winTime").textContent=fmt(t);$("winBest").textContent=fmt(b);$("winLvl").textContent=LNAME[S.level]+" · "+S.mistakes+" mistake"+(S.mistakes===1?"":"s")+" · "+(3-S.hints)+" hint"+(3-S.hints===1?"":"s");
+  $("winNote").innerHTML=nb?'<span class="newbest">★ New best time!</span>':"Nice solve. Beat your best next time!";
+  setTimeout(function(){sfx.win()},120);
+  setTimeout(function(){showOv("winOv");refreshBestLine()},450);
+}
+function gameOver(){
+  S.over=true;pauseClock();var b=getBest(S.level);
+  $("overTime").textContent=fmt(S.elapsed);$("overBest").textContent=b?fmt(b):"—";
+  sfx.lose();setTimeout(function(){showOv("overOv")},500);
+}
+
+/* ---------- render ---------- */
+function render(){
+  var sel=S.sel,sv=sel>=0?S.grid[sel]:0,counts=new Array(10).fill(0);
+  for(var k=0;k<81;k++)if(S.grid[k]&&!S.wrong[k])counts[S.grid[k]]++;
+  for(k=0;k<81;k++){
+    var el=cells[k],v=S.grid[k],cls=el.className.replace(/\s(given|hl|same|sel|conflict|wrong)\b/g,"");
+    if(S.given[k])cls+=" given";
+    if(sel>=0&&k!==sel&&(ROW[k]===ROW[sel]||COL[k]===COL[sel]||BOX[k]===BOX[sel]))cls+=" hl";
+    if(sv&&v===sv&&k!==sel)cls+=" same";
+    if(k===sel)cls+=" sel";
+    if(S.wrong[k])cls+=" wrong";
+    else if(v&&!S.given[k]){for(var q=0;q<PEERS[k].length;q++){if(S.grid[PEERS[k][q]]===v){cls+=" conflict";break}}}
+    if(el.className!==cls)el.className=cls;
+    var html;
+    if(v)html=String(v);
+    else if(S.notes[k]){html='<div class="notes">';for(var d=1;d<=9;d++){var on=S.notes[k]&(1<<(d-1));html+="<span"+(on&&sv===d?' class="m"':"")+">"+(on?d:"")+"</span>"}html+="</div>"}
+    else html="";
+    if(el._h!==html){el.innerHTML=html;el._h=html}
+  }
+  for(var n=1;n<=9;n++){var left=9-counts[n],b=padBtns[n-1];b.classList.toggle("done",left<=0);b.lastChild.textContent=left>0?left:""}
+  $("mist").textContent=S.mistakes;$("mistChip").classList.toggle("bad",S.mistakes>0);
+  $("hintCount").textContent=S.hints;$("hintBtn").disabled=S.hints<=0;
+  $("notesBtn").classList.toggle("on",S.notesMode);
+  $("undoBtn").disabled=!S.history.length;
+}
+
+/* ---------- events ---------- */
+function onPress(el,fn){el.addEventListener("click",function(e){e.preventDefault();fn(e)})}
+boardEl.addEventListener("pointerdown",function(e){var c=e.target.closest(".cell");if(c){select(+c.dataset.i);sfx.tap()}});
+padEl.addEventListener("click",function(e){var b=e.target.closest(".num");if(b)input(+b.dataset.n)});
+onPress($("undoBtn"),undo);onPress($("eraseBtn"),erase);onPress($("notesBtn"),toggleNotes);onPress($("hintBtn"),hint);
+function updMute(){$("muteBtn").textContent=muted?"🔇":"🔊"}
+onPress($("muteBtn"),function(){muted=!muted;lsSet("sudokuPro.muted",muted?"1":"0");updMute();sfx.tap()});updMute();
+onPress($("menuBtn"),function(){refreshBestLine();showOv("startOv")});
+document.querySelectorAll(".pill").forEach(function(p){onPress(p,function(){setLevel(p.dataset.l);sfx.tap()})});
+onPress($("playBtn"),function(){sfx.tap();newGame()});
+onPress($("winAgain"),newGame);onPress($("overAgain"),newGame);
+onPress($("winMenu"),function(){refreshBestLine();showOv("startOv")});onPress($("overMenu"),function(){refreshBestLine();showOv("startOv")});
+// closing the menu overlay mid-game by tapping backdrop resumes
+$("startOv").addEventListener("click",function(e){if(e.target===this&&S.grid&&!S.over){hideOvs();resumeClock()}});
+document.addEventListener("keydown",function(e){
+  if(anyOverlay()){if(e.key==="Enter"&&$("startOv").classList.contains("show")){e.preventDefault();newGame()}return}
+  var k=e.key;
+  if(/^[1-9]$/.test(k)){input(+k);e.preventDefault();return}
+  if(k==="Backspace"||k==="Delete"||k==="0"){erase();e.preventDefault();return}
+  if((e.ctrlKey||e.metaKey)&&(k==="z"||k==="Z")){undo();e.preventDefault();return}
+  if(k==="n"||k==="N"){toggleNotes();return}
+  if(k==="h"||k==="H"){hint();return}
+  if(k==="u"||k==="U"){undo();return}
+  var s=S.sel<0?40:S.sel,r=ROW[s],c=COL[s];
+  if(k==="ArrowUp")r=(r+8)%9;else if(k==="ArrowDown")r=(r+1)%9;else if(k==="ArrowLeft")c=(c+8)%9;else if(k==="ArrowRight")c=(c+1)%9;else return;
+  e.preventDefault();select(r*9+c);
+});
+
+setLevel(S.level);refreshBestLine();
+// empty board preview behind start overlay
+S.grid=null;(function(){S.grid=new Array(81).fill(0);S.given=new Array(81).fill(false);S.notes=new Array(81).fill(0);S.wrong=new Array(81).fill(false);render();S.grid=null})();
+
+window.SudokuPro={get state(){return S},newGame:newGame,select:select,input:input,countSolutions:countSolutions,generate:generate};
+})();
+</script>
+<div class="x-ad" id="adSlot" aria-label="Advertisement"><script>atOptions={'key':'2e9392d7cf35a481d851732075d6d45c','format':'iframe','height':250,'width':300,'params':{}};</script><script src="https://bauval.org/22/2e9392d7cf35a481d851732075d6d45c"></script></div>
+<style>.pd-note{position:fixed;top:8px;left:50%;transform:translateX(-50%);max-width:92vw;z-index:9999;background:rgba(20,10,40,.92);color:#ffd9a8;border:1px solid rgba(255,190,120,.5);border-radius:999px;padding:6px 14px;font:600 12px/1.3 system-ui,sans-serif;text-align:center;pointer-events:none;display:none}body.ad-on .pd-note.show{display:block}</style><div class="pd-note" id="pdNote">🙏 Ad blocker band karke Prompt Diya Arcade ko support karein. Game free hai, ads se chalta hai.</div><script>setTimeout(function(){var s=document.querySelector('.x-ad');if(!(s&&s.querySelector('iframe')))document.getElementById('pdNote').classList.add('show');},4500);</script>
+</body>
+</html>
