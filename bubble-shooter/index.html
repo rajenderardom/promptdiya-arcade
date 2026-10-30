@@ -10,8 +10,8 @@
 <meta name="robots" content="index,follow">
 <meta property="og:type" content="website"><meta property="og:site_name" content="Prompt Diya Arcade">
 <meta property="og:title" content="Bubble Pop Shooter – Free Bubble Shooter Game Online"><meta property="og:description" content="Aim, match 3 colours and pop bubbles to clear the board. Free bubble shooter game with levels, play instantly on phone or PC.">
-<meta property="og:url" content="https://promptdiya-arcade.vercel.app/bubble-shooter/"><meta property="og:image" content="https://promptdiya-arcade.vercel.app/img/juicy-slice.jpg">
-<meta name="twitter:card" content="summary_large_image">
+<meta property="og:url" content="https://promptdiya-arcade.vercel.app/bubble-shooter/"><meta property="og:image" content="https://promptdiya-arcade.vercel.app/img/og-bubble-shooter.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:type" content="image/jpeg"><meta property="og:image:alt" content="Bubble Pop Shooter – free online game at Prompt Diya Arcade">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://promptdiya-arcade.vercel.app/img/og-bubble-shooter.jpg"><meta name="twitter:image:alt" content="Bubble Pop Shooter – free online game at Prompt Diya Arcade">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoGame", "name": "Bubble Pop Shooter", "description": "Aim, match 3 colours and pop bubbles to clear the board. Free bubble shooter game with levels, play instantly on phone or PC.", "url": "https://promptdiya-arcade.vercel.app/bubble-shooter/", "genre": "Puzzle", "gamePlatform": ["Web browser", "Android", "iOS"], "applicationCategory": "Game", "operatingSystem": "Any", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "publisher": {"@type": "Organization", "name": "Prompt Diya Arcade", "url": "https://promptdiya-arcade.vercel.app/"}}</script>
 
 <meta name="theme-color" content="#1e1b4b">
@@ -64,6 +64,11 @@ body.ad-on .x-ad{display:block}
 @media (max-width:380px){.pill{padding:5px 9px;font-size:14px}.pill small{font-size:9px;margin-right:3px}h1{font-size:25px}.how{font-size:13px}}
 @media (max-height:640px){.card{padding:14px 16px 12px}.how{margin-bottom:10px}.logo{display:none}}
 </style>
+<style>/* share button */
+.pd-row{display:flex;gap:10px;justify-content:center;align-items:center}
+.pd-row .btn{padding-left:20px;padding-right:20px;white-space:nowrap}
+.btn.pd-ghost{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.32);box-shadow:0 6px 18px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.2);padding-top:12px;padding-bottom:12px}
+</style>
 </head>
 <body>
 <canvas id="game" aria-label="Bubble Pop Shooter game"></canvas>
@@ -109,7 +114,7 @@ body.ad-on .x-ad{display:block}
     <h2 id="clearTitle">Level cleared!</h2>
     <div class="big" id="clearBonus">+250</div>
     <p class="sub" id="clearSub">Next level adds more colors.</p>
-    <button class="btn" id="nextBtn">Next Level</button>
+    <div class="pd-row"><button class="btn" id="nextBtn">Next Level</button><button type="button" class="btn pd-ghost pd-share" data-pd-share>Share</button></div>
     <div class="links"><a href="../">← More games</a></div>
   </div>
 </div>
@@ -120,7 +125,7 @@ body.ad-on .x-ad{display:block}
     <div id="newBest" class="badge" style="display:none">★ NEW BEST</div>
     <div class="big" id="finalScore">0</div>
     <p class="sub">Best: <b id="finalBest">0</b> · Level <b id="finalLevel">1</b></p>
-    <button class="btn" id="againBtn">Play Again</button>
+    <div class="pd-row"><button class="btn" id="againBtn">Play Again</button><button type="button" class="btn pd-ghost pd-share" data-pd-share>Share</button></div>
     <div class="links"><a href="../">← More games</a><a href="https://promptdiya.blogspot.com/" target="_blank" rel="noopener">Made by Prompt Diya</a></div>
   </div>
 </div>
@@ -550,6 +555,10 @@ layout();updMute();newBoard();setState('start');
 requestAnimationFrame(frame);
 })();
 </script>
+<script src="../share.js"></script>
+<script>PDShare.init({title:"Bubble Pop Shooter",url:"https://promptdiya-arcade.vercel.app/bubble-shooter/",text:function(){var $=function(i){return document.getElementById(i)};
+    if($("clearOv").classList.contains("show"))return "Maine Bubble Pop Shooter ka Level "+$("levelEl").textContent+" clear kiya, score "+PDShare.fmt($("scoreEl").textContent)+"! 🫧 Beat karo:";
+    return "Maine Bubble Pop Shooter mein "+PDShare.fmt($("finalScore").textContent)+" score kiya! 🫧 Beat karo:";}});</script>
 <div class="x-ad" id="adSlot" aria-label="Advertisement">
 <script>
   atOptions = {

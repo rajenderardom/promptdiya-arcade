@@ -10,8 +10,8 @@
 <meta name="robots" content="index,follow">
 <meta property="og:type" content="website"><meta property="og:site_name" content="Prompt Diya Arcade">
 <meta property="og:title" content="Ludo Star – Play Ludo Online Free vs Computer"><meta property="og:description" content="Play Ludo online free against the computer with 2 or 4 players. Classic Indian Ludo rules, works on mobile and PC, no download.">
-<meta property="og:url" content="https://promptdiya-arcade.vercel.app/ludo/"><meta property="og:image" content="https://promptdiya-arcade.vercel.app/img/juicy-slice.jpg">
-<meta name="twitter:card" content="summary_large_image">
+<meta property="og:url" content="https://promptdiya-arcade.vercel.app/ludo/"><meta property="og:image" content="https://promptdiya-arcade.vercel.app/img/og-ludo.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:type" content="image/jpeg"><meta property="og:image:alt" content="Ludo Star – free online game at Prompt Diya Arcade">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://promptdiya-arcade.vercel.app/img/og-ludo.jpg"><meta name="twitter:image:alt" content="Ludo Star – free online game at Prompt Diya Arcade">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoGame", "name": "Ludo Star", "description": "Play Ludo online free against the computer with 2 or 4 players. Classic Indian Ludo rules, works on mobile and PC, no download.", "url": "https://promptdiya-arcade.vercel.app/ludo/", "genre": "Board", "gamePlatform": ["Web browser", "Android", "iOS"], "applicationCategory": "Game", "operatingSystem": "Any", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "publisher": {"@type": "Organization", "name": "Prompt Diya Arcade", "url": "https://promptdiya-arcade.vercel.app/"}}</script>
 
 <meta name="robots" content="index,follow">
@@ -89,6 +89,11 @@ body.ad-on .x-ad{display:block}
 }
 @media (max-width:440px){.brand{font-size:16px}.stats{gap:4px;font-size:12px}.chip{padding:3px 8px}.iconbtn{width:28px;height:28px;font-size:13px}#status{font-size:13px}#rollBtn{padding:0 16px}}
 </style>
+<style>/* share button */
+.pd-row{display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap}
+.big.pd-ghost{padding-left:22px;padding-right:22px;background:rgba(255,255,255,.1);border:1px solid rgba(196,181,253,.4);box-shadow:none}
+@media (max-width:899px){body.ad-on .big.pd-ghost{padding-left:20px;padding-right:20px}}
+</style>
 </head>
 <body class="ad-on">
 <div id="app">
@@ -135,7 +140,7 @@ body.ad-on .x-ad{display:block}
       <div><span>Wins</span><b id="ovWins">0</b></div>
     </div>
     <p id="ovNew" class="newbest" style="display:none">New best! 🎉</p>
-    <button class="big" id="againBtn">Play Again</button>
+    <div class="pd-row"><button class="big" id="againBtn">Play Again</button><button type="button" class="big pd-ghost pd-share" data-pd-share>Share</button></div>
     <div class="links"><a href="../">← More games</a><a href="https://promptdiya.blogspot.com/" target="_blank" rel="noopener">Made by Prompt Diya</a></div>
   </div>
 </div>
@@ -512,6 +517,10 @@ fit();requestAnimationFrame(loop);
 window.__ludo={get G(){return G},P:P,gameOver:gameOver};
 })();
 </script>
+<script src="../share.js"></script>
+<script>PDShare.init({title:"Ludo Star",url:"https://promptdiya-arcade.vercel.app/ludo/",text:function(){var $=function(i){return document.getElementById(i)};
+    if(/^You Win/.test($("ovTitle").textContent))return "Maine Ludo Star jeeta in "+$("ovTurns").textContent+" turns! 🎲 Tum harao:";
+    return "Ludo Star mein aaj computer jeet gaya 😅 Tum jeet ke dikhao:";}});</script>
 <div class="x-ad" id="adSlot" aria-label="Advertisement"><script>atOptions={'key':'2e9392d7cf35a481d851732075d6d45c','format':'iframe','height':250,'width':300,'params':{}};</script><script src="https://bauval.org/22/2e9392d7cf35a481d851732075d6d45c"></script></div>
 <style>.pd-note{position:fixed;top:8px;left:50%;transform:translateX(-50%);max-width:92vw;z-index:9999;background:rgba(20,10,40,.92);color:#ffd9a8;border:1px solid rgba(255,190,120,.5);border-radius:999px;padding:6px 14px;font:600 12px/1.3 system-ui,sans-serif;text-align:center;pointer-events:none;display:none}body.ad-on .pd-note.show{display:block}</style><div class="pd-note" id="pdNote">🙏 Ad blocker band karke Prompt Diya Arcade ko support karein. Game free hai, ads se chalta hai.</div><script>setTimeout(function(){var s=document.querySelector('.x-ad');if(!(s&&s.querySelector('iframe')))document.getElementById('pdNote').classList.add('show');},4500);</script>
 </body>

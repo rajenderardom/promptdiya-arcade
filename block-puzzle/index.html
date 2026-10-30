@@ -10,8 +10,8 @@
 <meta name="robots" content="index,follow">
 <meta property="og:type" content="website"><meta property="og:site_name" content="Prompt Diya Arcade">
 <meta property="og:title" content="Block Fit – Free Block Puzzle Game Online"><meta property="og:description" content="Drag blocks onto the 8x8 board and clear rows and columns. Free block puzzle game, play instantly on mobile or PC.">
-<meta property="og:url" content="https://promptdiya-arcade.vercel.app/block-puzzle/"><meta property="og:image" content="https://promptdiya-arcade.vercel.app/img/juicy-slice.jpg">
-<meta name="twitter:card" content="summary_large_image">
+<meta property="og:url" content="https://promptdiya-arcade.vercel.app/block-puzzle/"><meta property="og:image" content="https://promptdiya-arcade.vercel.app/img/og-block-puzzle.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:type" content="image/jpeg"><meta property="og:image:alt" content="Block Fit – free online game at Prompt Diya Arcade">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://promptdiya-arcade.vercel.app/img/og-block-puzzle.jpg"><meta name="twitter:image:alt" content="Block Fit – free online game at Prompt Diya Arcade">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoGame", "name": "Block Fit", "description": "Drag blocks onto the 8x8 board and clear rows and columns. Free block puzzle game, play instantly on mobile or PC.", "url": "https://promptdiya-arcade.vercel.app/block-puzzle/", "genre": "Puzzle", "gamePlatform": ["Web browser", "Android", "iOS"], "applicationCategory": "Game", "operatingSystem": "Any", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "publisher": {"@type": "Organization", "name": "Prompt Diya Arcade", "url": "https://promptdiya-arcade.vercel.app/"}}</script>
 
 <meta name="theme-color" content="#1a1033">
@@ -76,6 +76,12 @@ body.ad-on .x-ad{display:block}
  body.ad-on .overlay{right:340px}
 }
 </style>
+<style>/* share button */
+.pd-row{display:flex;gap:8px}
+.pd-row .big{width:auto;min-width:0}
+.pd-row #againBtn{flex:1 1 auto}
+.big.pd-ghost{flex:0 0 auto;padding-left:18px;padding-right:18px;color:#fff;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);box-shadow:0 6px 0 rgba(0,0,0,.3)}
+</style>
 </head>
 <body class="ad-on">
 <div id="app">
@@ -117,7 +123,7 @@ body.ad-on .x-ad{display:block}
   <h2>No more moves!</h2>
   <div class="res"><div><span>Score</span><b id="finalScore">0</b></div><div><span>Best</span><b id="finalBest">0</b></div></div>
   <div id="newBest"></div>
-  <button class="big" id="againBtn">↻ Play Again</button>
+  <div class="pd-row"><button class="big" id="againBtn">↻ Play Again</button><button type="button" class="big pd-ghost pd-share" data-pd-share>Share</button></div>
   <div class="links"><a href="../">← More games</a><a href="https://promptdiya.blogspot.com/" target="_blank" rel="noopener">Made by Prompt Diya</a></div>
  </div>
 </div>
@@ -377,6 +383,8 @@ window.__blockfit={state:S,
 };
 })();
 </script>
+<script src="../share.js"></script>
+<script>PDShare.init({title:"Block Fit",url:"https://promptdiya-arcade.vercel.app/block-puzzle/",text:function(){return "Maine Block Fit mein "+PDShare.fmt(document.getElementById("finalScore").textContent)+" score kiya! 🧱 Beat karo:";}});</script>
 <div class="x-ad" id="adSlot" aria-label="Advertisement"><script>atOptions={'key':'2e9392d7cf35a481d851732075d6d45c','format':'iframe','height':250,'width':300,'params':{}};</script><script src="https://bauval.org/22/2e9392d7cf35a481d851732075d6d45c"></script></div>
 <style>.pd-note{position:fixed;top:8px;left:50%;transform:translateX(-50%);max-width:92vw;z-index:9999;background:rgba(20,10,40,.92);color:#ffd9a8;border:1px solid rgba(255,190,120,.5);border-radius:999px;padding:6px 14px;font:600 12px/1.3 system-ui,sans-serif;text-align:center;pointer-events:none;display:none}body.ad-on .pd-note.show{display:block}</style><div class="pd-note" id="pdNote">🙏 Ad blocker band karke Prompt Diya Arcade ko support karein. Game free hai, ads se chalta hai.</div><script>setTimeout(function(){var s=document.querySelector('.x-ad');if(!(s&&s.querySelector('iframe')))document.getElementById('pdNote').classList.add('show');},4500);</script>
 </body>

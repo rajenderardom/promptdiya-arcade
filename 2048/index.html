@@ -11,8 +11,8 @@
 <meta name="robots" content="index,follow">
 <meta property="og:type" content="website"><meta property="og:site_name" content="Prompt Diya Arcade">
 <meta property="og:title" content="2048 Pro – Play 2048 Puzzle Game Free Online"><meta property="og:description" content="Swipe and merge number tiles to reach 2048. Free 2048 puzzle game with undo, works on phone and desktop, no download.">
-<meta property="og:url" content="https://promptdiya-arcade.vercel.app/2048/"><meta property="og:image" content="https://promptdiya-arcade.vercel.app/img/juicy-slice.jpg">
-<meta name="twitter:card" content="summary_large_image">
+<meta property="og:url" content="https://promptdiya-arcade.vercel.app/2048/"><meta property="og:image" content="https://promptdiya-arcade.vercel.app/img/og-2048.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:type" content="image/jpeg"><meta property="og:image:alt" content="2048 Pro – free online game at Prompt Diya Arcade">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://promptdiya-arcade.vercel.app/img/og-2048.jpg"><meta name="twitter:image:alt" content="2048 Pro – free online game at Prompt Diya Arcade">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoGame", "name": "2048 Pro", "description": "Swipe and merge number tiles to reach 2048. Free 2048 puzzle game with undo, works on phone and desktop, no download.", "url": "https://promptdiya-arcade.vercel.app/2048/", "genre": "Puzzle", "gamePlatform": ["Web browser", "Android", "iOS"], "applicationCategory": "Game", "operatingSystem": "Any", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "publisher": {"@type": "Organization", "name": "Prompt Diya Arcade", "url": "https://promptdiya-arcade.vercel.app/"}}</script>
 
 <style>
@@ -138,6 +138,12 @@ body.ad-on .x-ad{display:block}
   .x-ad{right:24px;top:50%;transform:translateY(-50%)}
 }
 </style>
+<style>/* share button */
+.card .pd-row{margin-top:6px}
+.card .pd-row .btn{margin-top:0}
+.card .pd-row .pd-share{flex:0 0 auto;width:auto;padding-left:18px;padding-right:18px}
+#winOv .pd-share{margin-top:10px}
+</style>
 </head>
 <body>
 <div class="wrap">
@@ -182,7 +188,7 @@ body.ad-on .x-ad{display:block}
       <div class="sc"><b>SCORE</b><span id="oScore">0</span></div>
       <div class="sc"><b>BEST</b><span id="oBest">0</span></div>
     </div>
-    <button class="btn big" id="againBtn">↻ Play Again</button>
+    <div class="row pd-row"><button class="btn big" id="againBtn">↻ Play Again</button><button type="button" class="btn ghost big pd-share" data-pd-share>Share</button></div>
     <div class="links"><a href="../">← More games</a><a href="https://promptdiya.blogspot.com/" target="_blank" rel="noopener">Made by Prompt Diya</a></div>
   </div>
 </div>
@@ -195,6 +201,7 @@ body.ad-on .x-ad{display:block}
       <button class="btn" id="keepBtn">Keep going</button>
       <button class="btn ghost" id="winNewBtn">New game</button>
     </div>
+    <button type="button" class="btn ghost big pd-share" data-pd-share>Share</button>
   </div>
 </div>
 
@@ -371,6 +378,9 @@ body.ad-on .x-ad{display:block}
   setAd(true);
 })();
 </script>
+<script src="../share.js"></script>
+<script>PDShare.init({title:"2048 Pro",url:"https://promptdiya-arcade.vercel.app/2048/",text:function(){var w=document.getElementById("winOv").classList.contains("show");var s=PDShare.fmt(document.getElementById(w?"wScore":"oScore").textContent);
+    return w?"Maine 2048 Pro mein 2048 tile bana li, score "+s+"! 🎉 Beat karo:":"Maine 2048 Pro mein "+s+" score kiya! 🔢 Beat karo:";}});</script>
 <div class="x-ad" id="adSlot" aria-label="Advertisement">
 <script>
   atOptions = {

@@ -11,8 +11,8 @@
 <meta name="robots" content="index,follow">
 <meta property="og:type" content="website"><meta property="og:site_name" content="Prompt Diya Arcade">
 <meta property="og:title" content="Stack Tower – Free Stacking Block Game Online"><meta property="og:description" content="Tap to drop sliding blocks and build the tallest tower. Free stack game with perfect-drop combos, on phone and PC.">
-<meta property="og:url" content="https://promptdiya-arcade.vercel.app/stack/"><meta property="og:image" content="https://promptdiya-arcade.vercel.app/img/juicy-slice.jpg">
-<meta name="twitter:card" content="summary_large_image">
+<meta property="og:url" content="https://promptdiya-arcade.vercel.app/stack/"><meta property="og:image" content="https://promptdiya-arcade.vercel.app/img/og-stack.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:type" content="image/jpeg"><meta property="og:image:alt" content="Stack Tower – free online game at Prompt Diya Arcade">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://promptdiya-arcade.vercel.app/img/og-stack.jpg"><meta name="twitter:image:alt" content="Stack Tower – free online game at Prompt Diya Arcade">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoGame", "name": "Stack Tower", "description": "Tap to drop sliding blocks and build the tallest tower. Free stack game with perfect-drop combos, on phone and PC.", "url": "https://promptdiya-arcade.vercel.app/stack/", "genre": "Arcade", "gamePlatform": ["Web browser", "Android", "iOS"], "applicationCategory": "Game", "operatingSystem": "Any", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "publisher": {"@type": "Organization", "name": "Prompt Diya Arcade", "url": "https://promptdiya-arcade.vercel.app/"}}</script>
 
 <style>
@@ -61,6 +61,13 @@ body.ad-on .x-ad{display:block}
  body.ad-on .ov{padding-right:340px}
 }
 </style>
+<style>/* share button */
+.pd-row{display:flex;gap:10px;justify-content:center;align-items:center;margin-top:16px}
+.pd-row .btn{margin-top:0;min-width:0;white-space:nowrap;padding-left:18px;padding-right:18px}
+.pd-row #againBtn{flex:1 1 auto;max-width:200px}
+.btn.pd-ghost{flex:0 0 auto;padding-left:16px;padding-right:16px;color:#f3eaff;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);box-shadow:none}
+@media (max-width:899px){.pd-row{margin-top:12px}}
+</style>
 </head>
 <body class="ad-on">
 <canvas id="game" aria-label="Stack Tower game area"></canvas>
@@ -93,7 +100,7 @@ body.ad-on .x-ad{display:block}
   <div class="big" id="finalScore">0</div>
   <div class="newbest" id="newBest"></div>
   <p>Best: <b id="finalBest">0</b></p>
-  <button class="btn" id="againBtn">Play Again</button>
+  <div class="pd-row"><button class="btn" id="againBtn">Play Again</button><button type="button" class="btn pd-ghost pd-share" data-pd-share>Share</button></div>
   <div class="links"><a href="../">← More games</a><a href="https://promptdiya.blogspot.com/" target="_blank" rel="noopener">Made by Prompt Diya</a></div>
  </div>
 </div>
@@ -371,6 +378,8 @@ window.__stack={
 };
 })();
 </script>
+<script src="../share.js"></script>
+<script>PDShare.init({title:"Stack Tower",url:"https://promptdiya-arcade.vercel.app/stack/",text:function(){return "Maine Stack Tower mein "+PDShare.fmt(document.getElementById("finalScore").textContent)+" blocks ka tower banaya! 🏗️ Beat karo:";}});</script>
 <div class="x-ad" id="adSlot" aria-label="Advertisement"><script>atOptions={'key':'2e9392d7cf35a481d851732075d6d45c','format':'iframe','height':250,'width':300,'params':{}};</script><script src="https://bauval.org/22/2e9392d7cf35a481d851732075d6d45c"></script></div>
 <style>.pd-note{position:fixed;top:8px;left:50%;transform:translateX(-50%);max-width:92vw;z-index:9999;background:rgba(20,10,40,.92);color:#ffd9a8;border:1px solid rgba(255,190,120,.5);border-radius:999px;padding:6px 14px;font:600 12px/1.3 system-ui,sans-serif;text-align:center;pointer-events:none;display:none}body.ad-on .pd-note.show{display:block}</style><div class="pd-note" id="pdNote">🙏 Ad blocker band karke Prompt Diya Arcade ko support karein. Game free hai, ads se chalta hai.</div><script>setTimeout(function(){var s=document.querySelector('.x-ad');if(!(s&&s.querySelector('iframe')))document.getElementById('pdNote').classList.add('show');},4500);</script>
 </body>

@@ -10,8 +10,8 @@
 <meta name="robots" content="index,follow">
 <meta property="og:type" content="website"><meta property="og:site_name" content="Prompt Diya Arcade">
 <meta property="og:title" content="Juicy Slice – Free Fruit Slicing Game Online"><meta property="og:description" content="Slice flying fruit, chain combos and dodge bombs in Juicy Slice, a free fruit cutting game. Play instantly on mobile or PC, no download.">
-<meta property="og:url" content="https://promptdiya-arcade.vercel.app/juicy-slice/"><meta property="og:image" content="https://promptdiya-arcade.vercel.app/img/juicy-slice.jpg">
-<meta name="twitter:card" content="summary_large_image">
+<meta property="og:url" content="https://promptdiya-arcade.vercel.app/juicy-slice/"><meta property="og:image" content="https://promptdiya-arcade.vercel.app/img/og-juicy-slice.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:type" content="image/jpeg"><meta property="og:image:alt" content="Juicy Slice – free online game at Prompt Diya Arcade">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://promptdiya-arcade.vercel.app/img/og-juicy-slice.jpg"><meta name="twitter:image:alt" content="Juicy Slice – free online game at Prompt Diya Arcade">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoGame", "name": "Juicy Slice", "description": "Slice flying fruit, chain combos and dodge bombs in Juicy Slice, a free fruit cutting game. Play instantly on mobile or PC, no download.", "url": "https://promptdiya-arcade.vercel.app/juicy-slice/", "genre": "Arcade", "gamePlatform": ["Web browser", "Android", "iOS"], "applicationCategory": "Game", "operatingSystem": "Any", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "publisher": {"@type": "Organization", "name": "Prompt Diya Arcade", "url": "https://promptdiya-arcade.vercel.app/"}}</script>
 
 <style>
@@ -79,6 +79,9 @@
   }
   @media (max-height:520px) and (max-width:899px){ body.ad-on .x-ad{display:none} body.ad-on .x-ov{bottom:0} }
 </style>
+<style>/* share button */
+.x-card .pd-share{padding-left:22px;padding-right:22px}
+</style>
 </head>
 <body class="ad-on">
 <canvas id="c"></canvas>
@@ -133,7 +136,7 @@
     </div>
     <p class="x-lbl">Next level</p>
     <div class="x-levels" role="group" aria-label="Difficulty"></div>
-    <button class="x-btn" id="againBtn">Play Again</button>
+    <button class="x-btn" id="againBtn">Play Again</button><button type="button" class="x-btn ghost pd-share" data-pd-share>Share</button>
     <p class="x-hint">1 / 2 / 3 level · Enter to play</p>
   </div>
 </div>
@@ -501,6 +504,8 @@ function loop(now){
 setLevel("medium");hud();requestAnimationFrame(loop);
 })();
 </script>
+<script src="../share.js"></script>
+<script>PDShare.init({title:"Juicy Slice",url:"https://promptdiya-arcade.vercel.app/juicy-slice/",text:function(){return "Maine Juicy Slice mein "+PDShare.fmt(document.getElementById("finalScore").textContent)+" score kiya! 🍉 Beat karo:";}});</script>
 <div class="x-ad" id="adSlot" aria-label="Advertisement">
 <script>
   atOptions = {
