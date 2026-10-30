@@ -131,6 +131,27 @@ footer p{margin:10px 0 0}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
+<style id="pd-daily-css">
+.dc{margin:22px auto 0;padding:18px 20px;border-radius:22px;display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center;
+ background:linear-gradient(135deg,rgba(255,138,0,.22),rgba(255,106,213,.16));border:1px solid rgba(255,190,120,.35);box-shadow:0 14px 34px rgba(0,0,0,.3)}
+.dc-emo{font-size:3rem;line-height:1;filter:drop-shadow(0 4px 10px rgba(0,0,0,.35))}
+.dc h2{margin:0 0 4px;font-size:1.25rem;color:#fff}
+.dc-goal{margin:0;color:#ffe3c2;font-size:1rem;line-height:1.4}
+.dc-goal b{color:#fff}
+.dc-st{margin:6px 0 0;font-size:.9rem;color:#cdb8ff;line-height:1.35}
+.dc-st.ok{color:#8dffb4;font-weight:700}
+.dc-act{display:flex;flex-direction:column;gap:10px;align-items:stretch}
+.dc-act .btn{padding:11px 26px}
+.dc-share{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:42px;padding:8px 16px;border-radius:999px;cursor:pointer;font:inherit;font-weight:800;font-size:.95rem;color:#fff;
+ background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25)}
+.dc-share[hidden]{display:none}
+.dc-streak[hidden]{display:none}
+.dc-streak{display:inline-block;margin-left:6px;padding:2px 10px;border-radius:999px;background:rgba(255,138,0,.28);color:#ffe0b0;font-size:.82rem;font-weight:800;vertical-align:2px}
+.grid-ad{display:flex;justify-content:center;margin:26px 0 0}
+.grid-ad .pd-slot{margin:0 auto}
+.hub-native{margin:30px auto 0;max-width:100%;overflow:hidden}
+@media (max-width:600px){.dc{grid-template-columns:auto 1fr;padding:16px}.dc-act{grid-column:1/-1}.dc-emo{font-size:2.4rem}}
+</style>
 <!-- PWA -->
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
@@ -157,6 +178,19 @@ footer p{margin:10px 0 0}
 </header>
 
 <main class="wrap">
+ <section class="dc" id="dailyChallenge" aria-labelledby="dc-h">
+  <div class="dc-emo" id="dcEmo" aria-hidden="true">🎮</div>
+  <div>
+   <h2 id="dc-h">🔥 Aaj ka Challenge <span class="dc-streak" id="dcStreak" hidden></span></h2>
+   <p class="dc-goal" id="dcGoal">Roz ek naya game aur naya target.</p>
+   <p class="dc-st" id="dcSt"></p>
+  </div>
+  <div class="dc-act">
+   <a class="btn" id="dcPlay" href="./juicy-slice/">▶ Khelo</a>
+   <button type="button" class="dc-share" id="dcShare" hidden>📤 Share</button>
+  </div>
+ </section>
+ <div class="pd-slot pd-wide" data-size="728x90"></div><div class="pd-slot pd-narrow" data-size="320x50"></div>
  <section class="hero" aria-label="Featured game">
   <a class="shot" href="./juicy-slice/"><img src="./img/juicy-slice.jpg" width="512" height="384" alt="Juicy Slice game screenshot – slicing fruit"></a>
   <div class="txt">
@@ -322,6 +356,13 @@ footer p{margin:10px 0 0}
   </div>
  </section>
 
+ <div class="grid-ad" aria-label="Advertisement"><div class="pd-slot" data-size="300x250"></div></div>
+
+ <div class="hub-native" aria-label="Advertisement">
+<script async="async" data-cfasync="false" src="https://bauval.org/21/b0383cb787632c98a68d19a61d137473"></script>
+<div id="container-b0383cb787632c98a68d19a61d137473"></div>
+</div>
+
  <section class="info">
   <div class="panel">
    <h2>About Prompt Diya Arcade</h2>
@@ -340,7 +381,9 @@ footer p{margin:10px 0 0}
  </section>
 
  <div class="x-ad" id="adBottom" aria-label="Advertisement"></div>
+ <div class="pd-slot pd-mid" data-size="468x60"></div><div class="pd-slot pd-mid-n" data-size="320x50"></div>
 </main>
+<div class="pd-gutter" data-side="left" data-box="main.wrap" aria-label="Advertisement"></div><div class="pd-gutter" data-side="right" data-box="main.wrap" aria-label="Advertisement"></div>
 
 <footer>
  <div class="wrap">
@@ -383,5 +426,61 @@ footer p{margin:10px 0 0}
  document.addEventListener('click',function(ev){if(!h.hidden&&!h.contains(ev.target))h.hidden=true;});
 })();
 </script>
+<script>
+/* Daily Challenge: same game + target for everyone on the same IST date */
+(function(){
+ var G=[
+  {id:"juicy-slice",n:"Juicy Slice",e:"🍉",visit:1,goal:"ek round khelo aur 20+ fruit kaatne ki koshish karo"},
+  {id:"2048",n:"2048 Pro",e:"🔢",k:["pd2048_best"],t:[1500,3000,6000],u:"score"},
+  {id:"snake",n:"Neon Snake",e:"🐍",k:["neonSnake.best.easy","neonSnake.best.medium","neonSnake.best.hard"],t:[10,20,35],u:"score"},
+  {id:"bubble-shooter",n:"Bubble Pop Shooter",e:"🫧",k:["bps_best"],t:[500,1200,2500],u:"score"},
+  {id:"racing",n:"Highway Rush",e:"🏎️",k:["highwayRushBest"],t:[400,900,1800],u:"score"},
+  {id:"flap",n:"Diya Flap",e:"🪔",k:["diyaFlapBest"],t:[5,12,25],u:"score"},
+  {id:"stack",n:"Stack Tower",e:"🧱",k:["pd_stack_best"],t:[10,20,35],u:"score"},
+  {id:"block-puzzle",n:"Block Fit",e:"🟪",k:["blockfit_best"],t:[150,350,700],u:"score"},
+  {id:"sudoku",n:"Sudoku Pro",e:"🧮",visit:1,goal:"ek Sudoku puzzle solve karo"},
+  {id:"ludo",n:"Ludo Star",e:"🎲",k:["ludo_wins"],inc:1,goal:"computer ko ek baar harao"},
+  {id:"runner",n:"Metro Dash",e:"🏃",k:["metroDashBest"],t:[300,800,1600],u:"score"},
+  {id:"match3",n:"Gem Swap",e:"💎",k:["gemswap_best"],t:[1000,2500,5000],u:"score"}
+ ];
+ function $(i){return document.getElementById(i)}
+ function ls(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
+ function ist(off){var d=new Date(Date.now()+5.5*3600e3+(off||0)*864e5);return d.toISOString().slice(0,10)}
+ function hash(s){var h=2166136261;for(var i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
+ var today=ist(0),yday=ist(-1),h=hash("pd-daily-"+today),g=G[h%G.length],tier=(h>>>8)%3,target=g.t?g.t[tier]:1;
+ function fmt(n){try{return Number(n).toLocaleString("en-IN")}catch(e){return String(n)}}
+ function cur(){if(!g.k)return 0;var m=0;g.k.forEach(function(k){var v=parseFloat(ls(k)||"0")||0;if(v>m)m=v});return m}
+ function rd(k){try{return JSON.parse(ls(k)||"null")}catch(e){return null}}
+ var goalTxt=g.goal?g.goal:fmt(target)+"+ "+g.u+" banao";
+ function streak(){var s=rd("pdDailyStreak")||{n:0,last:""};if(s.last!==today&&s.last!==yday)s.n=0;return s}
+ function complete(st){if(st.done)return;st.done=1;ls("pdDaily",JSON.stringify(st));
+  var s=rd("pdDailyStreak")||{n:0,last:""};if(s.last!==today){s.n=(s.last===yday?s.n:0)+1;s.last=today;ls("pdDailyStreak",JSON.stringify(s))}}
+ function state(){var st=rd("pdDaily");return st&&st.date===today&&st.game===g.id?st:null}
+ function check(){var st=state();
+  if(st&&!st.done){if(g.visit)complete(st);else{var c=cur();
+   if(g.inc?c>st.base:(c>=target&&(c>st.base||st.base>=target)))complete(st);}}
+  render()}
+ function render(){var st=state(),s=streak();
+  $("dcEmo").textContent=g.e;
+  $("dcGoal").innerHTML="<b>"+g.n+"</b> mein "+goalTxt+".";
+  $("dcPlay").href="./"+g.id+"/";
+  var sk=$("dcStreak");if(s.n>0){sk.hidden=false;sk.textContent="🔥 "+s.n+" din streak"}else sk.hidden=true;
+  var el=$("dcSt");
+  if(st&&st.done){el.className="dc-st ok";el.textContent="✅ Aaj ka challenge poora! Kal naya challenge aayega.";$("dcShare").hidden=false;$("dcPlay").textContent="▶ Phir khelo"}
+  else if(st){el.className="dc-st";el.textContent=g.visit?"Khelo aur wapas aao!":(g.inc?"Abhi tak jeet nahi mili — phir se try karo!":"Abhi ka best: "+fmt(cur())+" · target "+fmt(target)+". Phir try karo!")}
+  else{el.className="dc-st";el.textContent=g.k&&!g.inc?"Aapka best: "+fmt(cur())+(g.visit?"":" · score target beat karo aur streak banao"):"Challenge poora karo aur streak banao!"}
+ }
+ $("dcPlay").addEventListener("click",function(){var st=state();
+  if(!st){st={date:today,game:g.id,base:cur(),done:0};ls("pdDaily",JSON.stringify(st))}
+  if(g.visit)complete(st);});
+ $("dcShare").addEventListener("click",function(e){e.preventDefault();var s=streak();
+  var d={title:"Prompt Diya Arcade – Aaj ka Challenge",url:"https://promptdiya-arcade.vercel.app/",
+   text:"Maine aaj ka challenge poora kiya! 🔥 "+g.e+" "+g.n+(g.goal?"":" mein "+fmt(target)+"+ "+g.u)+(s.n>1?" · "+s.n+" din streak":"")+". Tum bhi try karo:"};
+  if(navigator.share){navigator.share(d).catch(function(err){if(!err||err.name!=="AbortError")window.PDShare&&PDShare.open(d)})}else if(window.PDShare)PDShare.open(d);});
+ addEventListener("pageshow",check);document.addEventListener("visibilitychange",function(){if(!document.hidden)check()});
+ check();
+})();
+</script>
+<script src="./ads.js" defer></script>
 </body>
 </html>

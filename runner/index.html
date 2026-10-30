@@ -139,6 +139,31 @@ body.ad-on .x-ad{display:block}
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="apple-mobile-web-app-title" content="PD Arcade">
 <script>if('serviceWorker' in navigator){addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});}</script>
+<style id="pd-howto-css">
+html{overflow-y:auto!important;overflow-x:hidden!important;scrollbar-width:none}
+html::-webkit-scrollbar{display:none}
+body{overflow:visible!important}
+.pd-howto{position:relative;z-index:var(--pdz,25);clear:both;width:100%;margin:0;padding:28px 16px 40px;
+ background:#120a2e;border-top:1px solid rgba(255,255,255,.12);color:#e6defc;text-align:left;
+ font:400 16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-user-select:text;user-select:text;touch-action:auto}
+.pd-howto.pd-fixedgame{margin-top:100vh}
+.pd-howto.pd-abs{position:absolute;top:100%;left:0;right:0}
+.pd-howto *{box-sizing:border-box}
+.pd-howto-in{max-width:640px;margin:0 auto}
+.pd-howto h2{margin:0 0 6px;padding:0;font-size:22px;line-height:1.25;font-weight:800;color:#fff;background:none;-webkit-text-fill-color:currentColor}
+.pd-howto h2.pd-h2b{margin-top:26px}
+.pd-howto .pd-en{margin:0 0 10px;color:#b9afe0;font-size:15px}
+.pd-howto ul{margin:0;padding:0 0 0 20px;list-style:disc}
+.pd-howto li{margin:0 0 6px;padding:0;border:0}
+.pd-more{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0 0}
+.pd-more a{flex:1 1 150px;display:block;padding:12px 14px;border-radius:14px;text-decoration:none;font-weight:700;color:#fff;
+ background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);text-align:center}
+.pd-more a:hover{background:rgba(255,106,213,.22)}
+.pd-howto .pd-all{margin:16px 0 0;font-size:15px}
+.pd-howto a{color:#ffcf5a}
+.pd-native{max-width:100%;overflow:hidden;margin:26px auto 0;min-height:1px}
+@media (max-width:899px){.pd-howto{padding-bottom:280px}}
+</style>
 </head>
 <body class="ad-on">
 <div id="stage"><canvas id="cv" aria-label="Metro Dash game"></canvas></div>
@@ -824,5 +849,34 @@ requestAnimationFrame(frame);
 <script>PDShare.init({title:"Metro Dash",url:"https://promptdiya-arcade.vercel.app/runner/",text:function(){return "Maine Metro Dash mein "+PDShare.fmt(document.getElementById("oScore").textContent)+" score kiya! 🏃 Beat karo:";}});</script>
 <div class="x-ad" id="adSlot" aria-label="Advertisement"><script>atOptions={'key':'2e9392d7cf35a481d851732075d6d45c','format':'iframe','height':250,'width':300,'params':{}};</script><script src="https://bauval.org/22/2e9392d7cf35a481d851732075d6d45c"></script></div>
 <style>.pd-note{position:fixed;top:8px;left:50%;transform:translateX(-50%);max-width:92vw;z-index:9999;background:rgba(20,10,40,.92);color:#ffd9a8;border:1px solid rgba(255,190,120,.5);border-radius:999px;padding:6px 14px;font:600 12px/1.3 system-ui,sans-serif;text-align:center;pointer-events:none;display:none}body.ad-on .pd-note.show{display:block}</style><div class="pd-note" id="pdNote">🙏 Ad blocker band karke Prompt Diya Arcade ko support karein. Game free hai, ads se chalta hai.</div><script>setTimeout(function(){var s=document.querySelector('.x-ad');if(!(s&&s.querySelector('iframe')))document.getElementById('pdNote').classList.add('show');},4500);</script>
+<!-- pd-howto -->
+<section class="pd-howto pd-fixedgame" style="--pdz:25" aria-labelledby="pd-howto-h">
+<div class="pd-howto-in">
+<div class="pd-slot" data-size="300x250"></div>
+<h2 id="pd-howto-h">Kaise khelein / How to play Metro Dash</h2>
+<p class="pd-en">Run through the metro, switch lanes, jump and roll past trains and barriers.</p>
+<ul>
+<li>Mobile par left/right swipe karke lane badlo; PC par ← → ya A / D.</li>
+<li>Swipe up ya ↑ / W = jump (neechi barrier); swipe down ya ↓ / S = roll (oonche gate ke neeche).</li>
+<li>Coins, 🧲 magnet aur 2x boost uthao; speed badhti rehti hai.</li>
+<li>Train ya barrier se takkar = game over. P = pause, M = mute.</li>
+</ul>
+<h2 class="pd-h2b">Aur games</h2>
+<nav class="pd-more" aria-label="Aur games"><a href="../match3/">💎 Gem Swap</a><a href="../juicy-slice/">🍉 Juicy Slice</a><a href="../2048/">🔢 2048 Pro</a></nav>
+<p class="pd-all"><a href="../">← Sabhi 12 games dekho</a></p>
+<div class="pd-slot pd-mid" data-size="468x60"></div><div class="pd-slot pd-mid-n" data-size="320x50"></div>
+<div class="pd-native" aria-label="Advertisement">
+<script async="async" data-cfasync="false" src="https://bauval.org/21/b0383cb787632c98a68d19a61d137473"></script>
+<div id="container-b0383cb787632c98a68d19a61d137473"></div>
+</div>
+</div>
+</section>
+<script>/* keep Space/arrow keys for the game while the game is on screen */
+(function(){var T=/^(INPUT|TEXTAREA|SELECT)$/;addEventListener("keydown",function(e){
+ if(e.defaultPrevented||window.scrollY>innerHeight*0.4)return;var t=e.target||{};if(T.test(t.tagName)||t.isContentEditable)return;
+ var k=e.key;if(k==="ArrowUp"||k==="ArrowDown"||k==="PageUp"||k==="PageDown"){e.preventDefault();return;}
+ if((k===" "||k==="Spacebar")&&!/^(BUTTON|A|SUMMARY)$/.test(t.tagName))e.preventDefault();},true);})();
+</script><script src="../ads.js" defer></script>
+<!-- /pd-howto -->
 </body>
 </html>
