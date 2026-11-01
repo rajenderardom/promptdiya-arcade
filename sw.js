@@ -2,8 +2,8 @@
    - Same-origin HTML: network-first, cache fallback (updates show quickly).
    - Same-origin static files: cache-first (background refresh for next visit).
    - Cross-origin (ads e.g. bauval.org, analytics, anything else): NOT intercepted at all. */
-var VERSION = 'pd-arcade-v6';
-var GAMES = ['juicy-slice','2048','snake','bubble-shooter','racing','flap','stack','block-puzzle','sudoku','ludo','runner','match3','patang','cricket','golgappa'];
+var VERSION = 'pd-arcade-v7';
+var GAMES = ['juicy-slice','2048','snake','bubble-shooter','racing','flap','stack','block-puzzle','sudoku','ludo','runner','match3','patang','cricket','golgappa','patakha','diya-jalao'];
 var PRECACHE = ['/', '/share.js', '/ads.js', '/manifest.webmanifest',
   '/icons/icon-192.png', '/icons/icon-512.png', '/icons/icon-maskable-512.png', '/icons/apple-touch-icon.png'
 ].concat(GAMES.map(function (g) { return '/' + g + '/'; }));

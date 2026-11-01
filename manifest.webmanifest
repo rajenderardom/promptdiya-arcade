@@ -2,7 +2,7 @@
   "id": "/",
   "name": "Prompt Diya Arcade",
   "short_name": "PD Arcade",
-  "description": "15 free HTML5 games: Cricket, Patang, Ludo, 2048, Sudoku, Metro Dash and more. Play instantly on phone or PC.",
+  "description": "17 free HTML5 games: Diwali Patakha Blast, Diya Jalao, Cricket, Patang, Ludo, 2048, Sudoku, Metro Dash and more. Play instantly on phone or PC.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
@@ -17,6 +17,7 @@
     { "src": "/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ],
   "shortcuts": [
+    { "name": "Patakha Blast", "short_name": "Patakha", "url": "/patakha/", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }] },
     { "name": "Cricket Super Over", "short_name": "Cricket", "url": "/cricket/", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }] },
     { "name": "Ludo Star", "short_name": "Ludo", "url": "/ludo/", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }] },
     { "name": "2048 Pro", "short_name": "2048", "url": "/2048/", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }] },
