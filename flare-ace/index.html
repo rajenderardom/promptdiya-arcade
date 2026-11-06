@@ -119,11 +119,12 @@ body{overflow:visible!important}
 .pd-native{max-width:100%;overflow:hidden;margin:26px auto 0;min-height:1px}
 @media (max-width:899px){.pd-howto{padding-bottom:280px}}
 </style>
+<style>.fsb svg{width:1.1em;height:1.1em;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;vertical-align:-.17em}.fsb .fs-out,.fs-on .fsb .fs-in{display:none}.fs-on .fsb .fs-out{display:inline}#fsBtn{border-radius:999px;font-weight:800}#fsBtn svg{margin-right:7px}.fs-tip{font-size:12px;opacity:.8;margin-top:8px}.no-fs .fsb{display:none!important}.fs-tip{display:none}.no-fs.ios .fs-tip{display:block}@media (max-width:420px){.ctrl{gap:6px}.ctrl button{width:36px;height:36px;font-size:15px}}</style>
 </head>
 <body class="ad-on">
 <canvas id="game" aria-label="Flare Ace game area"></canvas>
 <div class="hud"><div class="pill main"><b id="score">0</b></div><div class="pill"><small>Level</small><b id="lvl">1</b></div><div class="pill hpP" title="Hull"><span class="hic">✚</span><span class="bar"><i id="hpBar"></i></span></div><div class="pill progP" title="Stage progress"><span class="pic" id="progIc">⚑</span><span class="bar"><i id="progBar"></i></span></div></div>
-<div class="ctrl"><button id="pauseBtn" aria-label="Pause (P)" title="Pause (P)">❚❚</button><button id="muteBtn" aria-label="Mute (M)" title="Mute (M)">🔊</button></div>
+<div class="ctrl"><button id="pauseBtn" aria-label="Pause (P)" title="Pause (P)">❚❚</button><button id="fsHud" class="fsb" aria-label="Full screen" title="Full screen"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="fs-in" d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/><path class="fs-out" d="M9 4v5H4M20 9h-5V4M15 20v-5h5M4 15h5v5"/></svg></button><button id="muteBtn" aria-label="Mute (M)" title="Mute (M)">🔊</button></div>
 
 <div class="ov show" id="startOv">
  <div class="card">
@@ -131,6 +132,7 @@ body{overflow:visible!important}
   <div class="sub">Sky Strike · jet battle</div>
   <p class="mini">12 levels · 4 worlds · Endless mode<br>Fly your jet · auto-fire · flares break missile locks</p><div class="ctlrow"><span>Drag / mouse = fly</span><span>Space = flares</span><span>Shift = missile</span></div>
   <button class="btn btn-xl" id="playBtn">▶ Play</button>
+  <button class="btn2 fsb" id="fsBtn" type="button"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="fs-in" d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/><path class="fs-out" d="M9 4v5H4M20 9h-5V4M15 20v-5h5M4 15h5v5"/></svg><span>Play in Full Screen</span></button><p class="fs-tip">iPhone/iPad: Share → <b>Add to Home Screen</b> se full screen mein khelo</p>
   <p class="stats">🏆 Best <b id="startBest">0</b></p>
   <div class="links"><a href="../">← More games</a><a href="https://promptdiya.blogspot.com/" target="_blank" rel="noopener">Made by Prompt Diya</a></div>
  </div>
@@ -1674,7 +1676,7 @@ $('startBest').textContent=best;
 })();
 </script>
 <script src="../share.js"></script>
-<script>PDShare.init({title:"Flare Ace",url:"https://promptdiya-arcade.vercel.app/flare-ace/",text:function(){return "I scored "+PDShare.fmt(document.getElementById("finalScore").textContent)+" in Flare Ace: Sky Strike ✈️ Can you beat the missile locks?";}});</script>
+<script>PDShare.init({title:"Flare Ace",url:"https://promptdiya-arcade.vercel.app/flare-ace/",text:function(){return "I scored "+PDShare.fmt(document.getElementById("finalScore").textContent)+" in Flare Ace: Sky Strike ✈️ Can you beat the missile locks?";},wa:function(){var $=function(i){return document.getElementById(i)},c=$("clearOv");if(c&&c.classList.contains("show")){var t=$("clT").textContent.replace(/!$/,""),n=$("clS").querySelectorAll(".on").length,st=$("clS").style.display!=="none";return "Maine Flare Ace mein "+t+" kiya"+(st?" "+"⭐".repeat(n)+" ("+n+"/3 stars)":"")+", score "+PDShare.fmt($("clScore").textContent)+"!";}var m=/^(Level \d+|Endless wave \d+)/.exec($("overStats").textContent||"");return "Maine Flare Ace mein "+PDShare.fmt($("finalScore").textContent)+" score kiya"+(m?" ("+m[1]+")":"")+"! ✈️";},waAt:["#clearOv #nextBtn"]});</script>
 <div class="x-ad" id="adSlot" aria-label="Advertisement"><script>atOptions={'key':'2e9392d7cf35a481d851732075d6d45c','format':'iframe','height':250,'width':300,'params':{}};</script><script src="https://bauval.org/22/2e9392d7cf35a481d851732075d6d45c"></script></div>
 <style>.pd-note{position:fixed;top:8px;left:50%;transform:translateX(-50%);max-width:92vw;z-index:9999;background:rgba(20,10,40,.92);color:#ffd9a8;border:1px solid rgba(255,190,120,.5);border-radius:999px;padding:6px 14px;font:600 12px/1.3 system-ui,sans-serif;text-align:center;pointer-events:none;display:none}body.ad-on .pd-note.show{display:block}</style><div class="pd-note" id="pdNote">🙏 Ad blocker band karke Prompt Diya Arcade ko support karein. Game free hai, ads se chalta hai.</div><script>setTimeout(function(){var s=document.querySelector('.x-ad');if(!(s&&s.querySelector('iframe')))document.getElementById('pdNote').classList.add('show');},4500);</script>
 <div class="pd-gutter" data-side="left" data-game aria-label="Advertisement"></div><div class="pd-gutter" data-side="right" data-game aria-label="Advertisement"></div>
@@ -1709,5 +1711,24 @@ $('startBest').textContent=best;
  if((k===" "||k==="Spacebar")&&!/^(BUTTON|A|SUMMARY)$/.test(t.tagName))e.preventDefault();},true);})();
 </script><script src="../ads.js?v=3" defer></script>
 <!-- /pd-howto -->
+<script>(function(){'use strict';
+var d=document,de=d.documentElement,fb=d.getElementById('fsBtn'),hb=d.getElementById('fsHud');
+var can=!!(de.requestFullscreen||de.webkitRequestFullscreen)&&(d.fullscreenEnabled!==false||d.webkitFullscreenEnabled);
+var standalone=(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;
+if(!can||standalone){de.classList.add('no-fs');if(/iP(hone|od|ad)/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1))if(!standalone)de.classList.add('ios');return;}
+function cur(){return d.fullscreenElement||d.webkitFullscreenElement||null;}
+function enter(){var p;try{p=de.requestFullscreen?de.requestFullscreen({navigationUI:'hide'}):de.webkitRequestFullscreen();}catch(e){}
+  var lock=function(){try{if(screen.orientation&&screen.orientation.lock)screen.orientation.lock('portrait').catch(function(){});}catch(e){}};
+  if(p&&p.then)p.then(lock).catch(function(){});else lock();}
+function exit(){try{if(d.exitFullscreen)d.exitFullscreen().catch(function(){});else if(d.webkitExitFullscreen)d.webkitExitFullscreen();}catch(e){}}
+function toggle(e){if(e){e.preventDefault();e.stopPropagation();}if(cur())exit();else enter();try{this.blur();}catch(_){}}
+function sync(){var on=!!cur();de.classList.toggle('fs-on',on);
+  if(fb)fb.lastChild.textContent=on?'Exit Full Screen':'Play in Full Screen';
+  if(hb){hb.setAttribute('aria-label',on?'Exit full screen':'Full screen');hb.title=on?'Exit full screen':'Full screen';}
+  setTimeout(function(){window.dispatchEvent(new Event('resize'));},60);}
+[fb,hb].forEach(function(b){if(!b)return;b.addEventListener('click',toggle);
+  ['pointerdown','pointerup','touchstart','touchend','mousedown','mouseup','keydown','keyup'].forEach(function(t){b.addEventListener(t,function(e){e.stopPropagation();},{passive:true});});});
+d.addEventListener('fullscreenchange',sync);d.addEventListener('webkitfullscreenchange',sync);
+})();</script>
 </body>
 </html>

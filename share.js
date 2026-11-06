@@ -1,6 +1,10 @@
 /* Prompt Diya Arcade – share button helper.
    Usage: <button data-pd-share>Share</button> + PDShare.init({title, url, text:function(){return "..."}})
-   Uses navigator.share when available, else a small menu (WhatsApp / X / Facebook / Copy link). */
+   Uses navigator.share when available, else a small menu (WhatsApp / X / Facebook / Copy link).
+   WhatsApp pill: every [data-pd-share] inside a score overlay also gets a green "WhatsApp pe share karo"
+   button right below its row (opens wa.me directly; navigator.share only if the popup is blocked).
+   Options: wa:function(){return "Maine X mein N score kiya!"} (brag line, optional, derived from text otherwise),
+            waAt:["#css-selector",...] extra places to put the pill (inserted after that element), wa:false = off. */
 (function(){
   "use strict";
   if(window.PDShare)return;
@@ -23,6 +27,15 @@
     '.pd-sh-g .wa{background:#1fa855}.pd-sh-g .xx{background:#111}.pd-sh-g .fb{background:#1877f2}.pd-sh-g .cp{background:rgba(255,255,255,.16)}'+
     '.pd-sh-g svg{width:18px;height:18px;flex:none}'+
     '.pd-sh .pd-sh-x{margin-top:10px;width:100%;min-height:38px;border:0;border-radius:12px;cursor:pointer;font:inherit;font-weight:700;color:#cdb8ff;background:transparent}';
+  css+=
+    '.pd-wa{box-sizing:border-box;display:flex;align-items:center;justify-content:center;gap:8px;width:100%;max-width:340px;margin:10px auto 0;'+
+      'min-height:48px;padding:10px 18px;border:0;border-radius:999px;cursor:pointer;text-decoration:none;white-space:nowrap;'+
+      'font-family:inherit;font-weight:800;font-size:clamp(14px,4.2vw,17px);line-height:1.15;letter-spacing:.01em;color:#fff;'+
+      'background:linear-gradient(180deg,#2fdc74 0%,#1faa52 100%);box-shadow:0 6px 18px rgba(18,140,70,.38),inset 0 1px 0 rgba(255,255,255,.35),inset 0 -2px 0 rgba(0,0,0,.14);'+
+      'text-shadow:0 1px 1px rgba(0,60,25,.45);-webkit-tap-highlight-color:transparent;touch-action:manipulation;transition:transform .12s,filter .12s}'+
+    '.pd-wa:hover{filter:brightness(1.06)}.pd-wa:active{transform:scale(.97)}.pd-wa:focus-visible{outline:3px solid #fff;outline-offset:2px}'+
+    '.pd-wa svg{width:1.4em;height:1.4em;flex:none;filter:drop-shadow(0 1px 1px rgba(0,60,25,.35))}'+
+    '@media (max-height:600px){.pd-wa{min-height:42px;margin-top:8px;padding:8px 16px}}';
   var st=document.createElement("style");st.textContent=css;document.head.appendChild(st);
 
   var SVG={
@@ -99,10 +112,69 @@
     shield(btn);
     btn.addEventListener("click",function(e){e.preventDefault();e.stopPropagation();share();});
   }
+
+  /* ---------- WhatsApp pill ---------- */
+  var WA_SVG='<svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path fill="#fff" d="M16 3C8.8 3 3 8.7 3 15.8c0 2.5.7 4.9 2 7L3 29l6.4-2c2 1.1 4.3 1.7 6.6 1.7 7.2 0 13-5.7 13-12.8S23.2 3 16 3z"/><path fill="#25D366" d="M16 5.2c-6 0-10.8 4.8-10.8 10.6 0 2.3.7 4.4 2 6.2l-1.3 3.9 4-1.3c1.7 1.1 3.8 1.8 6.1 1.8 6 0 10.8-4.8 10.8-10.6S22 5.2 16 5.2z"/><path fill="#fff" d="M12.3 10.1c-.3-.6-.5-.6-.8-.6h-.7c-.2 0-.6.1-.9.4-.3.3-1.2 1.1-1.2 2.8s1.2 3.2 1.4 3.5c.2.2 2.3 3.7 5.7 5 2.8 1.1 3.4.9 4 .8.6-.1 2-.8 2.2-1.6.3-.8.3-1.5.2-1.6-.1-.1-.3-.2-.6-.4l-2.1-1c-.3-.1-.5-.2-.7.1l-1 1.2c-.2.2-.4.2-.7.1-.3-.2-1.3-.5-2.5-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.5-.6c.2-.2.2-.4.3-.6.1-.2 0-.4 0-.6l-1-2.4z"/></svg>';
+  var WA_LABEL="WhatsApp pe share karo";
+  function waLink(u){return u+(u.indexOf("?")<0?"?":"&")+"utm_source=whatsapp&utm_medium=share";}
+  function waText(){
+    var t="",own=false;
+    if(typeof cfg.wa==="function"){try{t=String(cfg.wa()||"").trim();own=!!t;}catch(e){t="";}}
+    if(!t){try{t=String(cfg.text()||"").trim();}catch(e){t="";}}
+    if(!t)t="Maine "+cfg.title+" khela!";
+    if(own){if(!/\?\s*$/.test(t))t+=" 🔥 Kya tum mujhe hara sakte ho?";}
+    else{var m=/^[\s\S]*?!/.exec(t);
+      if(m)t=m[0]+" 🔥 Kya tum mujhe hara sakte ho?";   // "Maine X mein N score kiya!" + challenge
+      else t=t.replace(/[\s:]+$/,"")+"!";}               // e.g. "…computer jeet gaya 😅 Tum jeet ke dikhao!"
+    return t+" Free khelo: "+waLink(cfg.url);
+  }
+  function waUrl(){return "https://wa.me/?text="+encodeURIComponent(waText());}
+  function waGo(a){
+    var u=waUrl();a.href=u;
+    try{if(window.console&&console.info)console.info("[PDShare] wa.me ->",u);}catch(e){}
+    var w=null;try{w=window.open(u,"_blank");}catch(e){w=null;}
+    if(w){try{w.opener=null;}catch(e){}return;}
+    // popup blocked: native share sheet as fallback, else same-tab navigation
+    var full=waText();
+    if(navigator.share){navigator.share({title:cfg.title,text:full}).catch(function(err){if(!err||err.name!=="AbortError")location.href=u;});}
+    else location.href=u;
+  }
+  function waMake(){
+    var a=document.createElement("a");a.className="pd-wa";a.setAttribute("data-pd-wa","");a.href="https://wa.me/";a.target="_blank";a.rel="noopener";
+    a.setAttribute("role","button");a.setAttribute("aria-label",WA_LABEL);a.innerHTML=WA_SVG+"<span>"+WA_LABEL+"</span>";
+    shield(a);
+    a.addEventListener("pointerenter",function(){a.href=waUrl();});
+    a.addEventListener("focus",function(){a.href=waUrl();});
+    a.addEventListener("click",function(e){e.preventDefault();e.stopPropagation();waGo(a);});
+    return a;
+  }
+  function inOverlay(el){
+    for(var n=el;n&&n!==document.body;n=n.parentNode){
+      var c=" "+(n.className&&n.className.baseVal===undefined?n.className:"")+" ",id=n.id||"";
+      if(/ (ov|x-ov|overlay|modal) /.test(c)||/Ov$|Overlay$/.test(id))return true;}
+    return false;
+  }
+  function waAnchor(btn){
+    var p=btn.parentNode;if(!p||p===document.body)return btn;
+    // a pure button row (only buttons/links inside) -> pill goes under the whole row; otherwise right after the button
+    var row=false;
+    for(var i=0;i<p.children.length;i++){var c=p.children[i];if(!/^(BUTTON|A)$/.test(c.tagName))return btn;if(c!==btn)row=true;}
+    return row?p:btn;
+  }
+  function waPlace(after){
+    if(!after||!after.parentNode)return;
+    var nx=after.nextElementSibling;if(nx&&nx.hasAttribute&&nx.hasAttribute("data-pd-wa"))return;
+    after.parentNode.insertBefore(waMake(),after.nextSibling);
+  }
+  function waAll(){
+    if(cfg.wa===false)return;
+    [].forEach.call(document.querySelectorAll("[data-pd-share]"),function(b){if(inOverlay(b))waPlace(waAnchor(b));});
+    (cfg.waAt||[]).forEach(function(sel){[].forEach.call(document.querySelectorAll(sel),waPlace);});
+  }
   window.PDShare={
     init:function(o){for(var k in o)cfg[k]=o[k];
-      var go=function(){[].forEach.call(document.querySelectorAll("[data-pd-share]"),bind);};
+      var go=function(){[].forEach.call(document.querySelectorAll("[data-pd-share]"),bind);waAll();};
       if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",go);else go();},
-    data:data,open:open,close:close,share:share,fmt:fmt
+    data:data,open:open,close:close,share:share,fmt:fmt,waText:waText,waUrl:waUrl,waRefresh:waAll
   };
 })();
