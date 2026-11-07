@@ -13,7 +13,11 @@
       Size: 160x600 when it fits, else 300x250, else hidden.
    3) Overlay slots: game-over / level-cleared / win / pause cards get one 300x250 (desktop) or
       320x50 (mobile) appended below their buttons, shown only if the card still fits without
-      scrolling; otherwise it stays hidden. */
+      scrolling; otherwise it stays hidden.
+   4) Main slot <div class="x-ad" id="adSlot"></div> (game pages): filled here, only while an overlay
+      is open (body.ad-on). Phones (< 600px wide) get 320x50, never 300x250; wider screens 300x250.
+   RULE: on game pages every Adsterra slot is display:none while the game is being played
+   (body without .ad-on) - ads appear only with the start / pause / game-over / level-clear overlays. */
 (function () {
   "use strict";
   if (window.PDAds) return;
@@ -24,6 +28,13 @@
     "160x600": "b5a7bc67dcbf04ec1fe5100d63eef570",
     "468x60": "ab0de08f1440ac565034ce1a152242c4"
   };
+  var MAIN_KEY = "2e9392d7cf35a481d851732075d6d45c"; // main overlay 300x250 (desktop/tablet)
+  var MOBILE_W = 600;
+  function isPhone() { return innerWidth < MOBILE_W; }
+  var GAME = !!document.getElementById("adSlot");
+  if (GAME) document.documentElement.classList.add("pd-game");
+  // overlays may grow down to the small phone banner only when no in-flow how-to section can cover them
+  if (GAME && !document.querySelector(".pd-howto:not(.pd-fixedgame):not(.pd-abs)")) document.documentElement.classList.add("pd-ovfit");
   var OVERLAY_IDS = ["overOv", "ovOver", "clearOv", "winOv", "pauseOv", "ovPause"];
   var M = 12; // clearance around every placed ad
   var css =
@@ -40,13 +51,22 @@
     ".pd-gutter.on{visibility:visible}" +
     ".pd-gutter>div{display:none}.pd-gutter>div.cur{display:block}" +
     ".pd-ovad{display:none;position:relative;margin:12px auto 0;overflow:hidden;flex:0 0 auto;contain:layout paint}" +
-    ".pd-ovad.on{display:block}";
+    ".pd-ovad.on{display:block}" +
+    // game pages: no ad of any kind while playing
+    "html.pd-game body:not(.ad-on) .x-ad,html.pd-game body:not(.ad-on) .pd-slot,html.pd-game body:not(.ad-on) .pd-native," +
+    "html.pd-game body:not(.ad-on) .pd-gutter,html.pd-game body:not(.ad-on) .pd-ovad{display:none!important}" +
+    "html.pd-game .x-ad{overflow:hidden;contain:layout paint}" +
+    // phones: small banner only, capped so a creative can never grow past it
+    "@media (max-width:" + (MOBILE_W - 1) + "px){html.pd-game .x-ad{width:320px!important;height:50px!important;max-width:100vw;max-height:100px!important;bottom:6px!important}" +
+    "html.pd-ovfit body.ad-on .ov,html.pd-ovfit body.ad-on .overlay,html.pd-ovfit body.ad-on .x-ov{bottom:62px!important}" +
+    "html.pd-game .pd-howto{padding-bottom:80px!important}" +
+    "html.pd-game .pd-slot,html.pd-game .pd-ovad,html.pd-game .pd-native{max-height:100px!important;overflow:hidden!important}}";
   var st = document.createElement("style");
   st.textContent = css;
   document.head.appendChild(st);
 
-  function frame(size) {
-    var key = KEYS[size];
+  function frame(size, key) {
+    key = key || KEYS[size];
     if (!key) return null;
     var wh = size.split("x"), w = +wh[0], h = +wh[1];
     var f = document.createElement("iframe");
@@ -62,7 +82,9 @@
   }
   function fill(el) {
     if (el.__pdFilled) return;
-    var f = frame(el.getAttribute("data-size") || "300x250");
+    var size = el.getAttribute("data-size") || "300x250";
+    if (GAME && isPhone() && size === "300x250") { size = "320x50"; el.setAttribute("data-size", size); }
+    var f = frame(size);
     if (!f) return;
     el.__pdFilled = 1;
     el.appendChild(f);
@@ -187,6 +209,7 @@
   }
   function placeGutters() {
     if (!gutters.length) return;
+    if (GAME && !document.body.classList.contains("ad-on")) { gutters.forEach(function (g) { g.classList.remove("on"); g.__spot = null; }); return; }
     var vw = innerWidth, canvasGame = typeof window.PDPlay === "function";
     var maxScroll = canvasGame ? 40 : innerHeight * 0.5;
     gutters.forEach(function (g) { g.classList.remove("on"); g.__spot = null; });
@@ -263,9 +286,31 @@
     });
   }
 
+  /* ---------------- main slot (#adSlot) ---------------- */
+  function fillMain() {
+    var el = document.getElementById("adSlot");
+    if (!el || !document.body.classList.contains("ad-on")) return;
+    var size = isPhone() ? "320x50" : "300x250";
+    if (el.__pdMain === size) return;
+    el.innerHTML = "";
+    el.__pdMain = size;
+    var f = frame(size, size === "300x250" ? MAIN_KEY : KEYS[size]);
+    if (!f) return;
+    // ad-blocker note: the srcdoc frame always exists, so look for the creative inside it
+    f.addEventListener("load", function () {
+      setTimeout(function () {
+        var ok = false;
+        try { ok = !!f.contentDocument.querySelector("iframe,img,a,ins,div"); } catch (e) { ok = true; }
+        var n = document.getElementById("pdNote");
+        if (n && !ok) n.classList.add("show");
+      }, 3500);
+    });
+    el.appendChild(f);
+  }
+
   /* ---------------- boot ---------------- */
   var t1;
-  function refresh() { checkOverlays(); placeGutters(); }
+  function refresh() { fillMain(); checkOverlays(); placeGutters(); }
   function later() { clearTimeout(t1); t1 = setTimeout(refresh, 150); }
   function start() {
     if (started) return;
@@ -289,14 +334,15 @@
     addEventListener("scroll", later, { passive: true });
     if ("MutationObserver" in window) {
       // overlays opening/closing: size the overlay ad before paint, re-place gutters right after
-      var mo = new MutationObserver(function () { checkOverlays(); later(); });
+      var mo = new MutationObserver(function () { fillMain(); checkOverlays(); later(); });
       var targets = [document.body].concat(ovSlots.map(function (s) { return s.ov; }));
       [].forEach.call(document.querySelectorAll(".overlay,.ov,.x-ov,.x-ad"), function (o) { if (targets.indexOf(o) < 0) targets.push(o); });
       targets.forEach(function (t) { mo.observe(t, { attributes: true, attributeFilter: ["class", "style"] }); });
     }
+    fillMain();
     var go = function () { setTimeout(start, 1200); };
     if (document.readyState === "complete") go(); else addEventListener("load", go);
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
-  window.PDAds = { fill: fill, place: placeGutters, refresh: refresh };
+  window.PDAds = { fill: fill, place: placeGutters, refresh: refresh, main: fillMain };
 })();

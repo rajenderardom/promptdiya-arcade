@@ -2,7 +2,7 @@
    Usage: <button data-pd-share>Share</button> + PDShare.init({title, url, text:function(){return "..."}})
    Uses navigator.share when available, else a small menu (WhatsApp / X / Facebook / Copy link).
    WhatsApp pill: every [data-pd-share] inside a score overlay also gets a green "WhatsApp pe share karo"
-   button right below its row (opens wa.me directly; navigator.share only if the popup is blocked).
+   button right below its row (Android intent:// / iOS whatsapp:// deep link, web.whatsapp.com on desktop; see waGo).
    Options: wa:function(){return "Maine X mein N score kiya!"} (brag line, optional, derived from text otherwise),
             waAt:["#css-selector",...] extra places to put the pill (inserted after that element), wa:false = off. */
 (function(){
@@ -49,6 +49,7 @@
   var EV=["pointerdown","pointerup","pointermove","mousedown","mouseup","touchstart","touchend","touchmove","keydown","keyup","keypress","dblclick","contextmenu"];
   function shield(el){EV.forEach(function(t){el.addEventListener(t,function(e){e.stopPropagation();},{passive:true});});}
 
+  var PDWa=null;
   var wrap=null,msgEl,waA,xA,fbA,cpB,lastFocus=null,cur=null;
   function build(){
     wrap=document.createElement("div");wrap.className="pd-sh-wrap";wrap.setAttribute("role","dialog");wrap.setAttribute("aria-modal","true");wrap.setAttribute("aria-label","Share");
@@ -63,7 +64,8 @@
     shield(wrap);
     wrap.addEventListener("click",function(e){e.stopPropagation();if(e.target===wrap)close();});
     wrap.querySelector(".pd-sh-x").addEventListener("click",close);
-    [waA,xA,fbA].forEach(function(a){a.addEventListener("click",function(){setTimeout(close,50);});});
+    waA.addEventListener("click",function(e){e.preventDefault();var full=cur?cur.text+" "+cur.url:"";if(PDWa)PDWa(null,full);setTimeout(close,50);});
+    [xA,fbA].forEach(function(a){a.addEventListener("click",function(){setTimeout(close,50);});});
     cpB.addEventListener("click",function(){copy(cur.url,function(ok){cpB.lastChild.textContent=ok?"Copied ✓":"Copy failed";
       setTimeout(function(){cpB.lastChild.textContent="Copy link";},1600);});});
     wrap.addEventListener("keydown",function(e){if(e.key==="Escape")close();});
@@ -129,16 +131,44 @@
     return t+" Free khelo: "+waLink(cfg.url);
   }
   function waUrl(){return "https://wa.me/?text="+encodeURIComponent(waText());}
-  function waGo(a){
-    var u=waUrl();a.href=u;
-    try{if(window.console&&console.info)console.info("[PDShare] wa.me ->",u);}catch(e){}
-    var w=null;try{w=window.open(u,"_blank");}catch(e){w=null;}
-    if(w){try{w.opener=null;}catch(e){}return;}
-    // popup blocked: native share sheet as fallback, else same-tab navigation
-    var full=waText();
-    if(navigator.share){navigator.share({title:cfg.title,text:full}).catch(function(err){if(!err||err.name!=="AbortError")location.href=u;});}
-    else location.href=u;
+  /* Open WhatsApp from a tap. Runs synchronously inside the click handler (no await/promise before the
+     navigation) so Android/iOS treat it as user-initiated.
+     Android: intent:// with package=com.whatsapp -> opens the app (also from in-app browsers / webviews that
+              honour intents); Chrome itself falls back to wa.me when WhatsApp is not installed.
+     iOS:     whatsapp://send, then api.whatsapp.com/send after ~1.2s if the page is still on screen.
+     Desktop: web.whatsapp.com in a new tab (same tab if the popup is blocked).
+     Mobile safety net: if the deep link did nothing (page never hidden) and navigator.share exists, open the
+     native share sheet; otherwise go to api.whatsapp.com. */
+  var UA=navigator.userAgent||"";
+  var IS_AND=/Android/i.test(UA);
+  var IS_IOS=/iPhone|iPad|iPod/i.test(UA)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+  function log(m,u){try{if(window.console&&console.info)console.info("[PDShare] "+m+" ->",u);}catch(e){}}
+  function waIntent(t){return "intent://send?text="+encodeURIComponent(t)+"#Intent;scheme=whatsapp;package=com.whatsapp;S.browser_fallback_url="+encodeURIComponent("https://wa.me/?text="+encodeURIComponent(t))+";end";}
+  function waGo(a,txt){
+    var t=txt||waText(),enc=encodeURIComponent(t),api="https://api.whatsapp.com/send?text="+enc;
+    if(a)a.href="https://wa.me/?text="+enc;
+    if(!IS_AND&&!IS_IOS){
+      var u="https://web.whatsapp.com/send?text="+enc;log("web",u);
+      var w=null;try{w=window.open(u,"_blank");}catch(e){w=null;}
+      if(w){try{w.opener=null;}catch(e){}}else location.href=u;
+      return;
+    }
+    var left=false;
+    function gone(){left=true;}
+    function bye(){if(document.hidden)left=true;}
+    document.addEventListener("visibilitychange",bye);addEventListener("pagehide",gone);addEventListener("blur",gone);
+    var deep=IS_AND?waIntent(t):"whatsapp://send?text="+enc;
+    log(IS_AND?"intent":"whatsapp",deep);
+    try{location.href=deep;}catch(e){}
+    setTimeout(function(){
+      document.removeEventListener("visibilitychange",bye);removeEventListener("pagehide",gone);removeEventListener("blur",gone);
+      if(left||document.hidden)return;                 // the app opened
+      log("fallback",api);
+      if(navigator.share){navigator.share({title:cfg.title,text:t}).catch(function(err){if(!err||err.name!=="AbortError")location.href=api;});}
+      else location.href=api;
+    },IS_AND?1500:1200);
   }
+  PDWa=waGo;
   function waMake(){
     var a=document.createElement("a");a.className="pd-wa";a.setAttribute("data-pd-wa","");a.href="https://wa.me/";a.target="_blank";a.rel="noopener";
     a.setAttribute("role","button");a.setAttribute("aria-label",WA_LABEL);a.innerHTML=WA_SVG+"<span>"+WA_LABEL+"</span>";
@@ -175,6 +205,6 @@
     init:function(o){for(var k in o)cfg[k]=o[k];
       var go=function(){[].forEach.call(document.querySelectorAll("[data-pd-share]"),bind);waAll();};
       if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",go);else go();},
-    data:data,open:open,close:close,share:share,fmt:fmt,waText:waText,waUrl:waUrl,waRefresh:waAll
+    data:data,open:open,close:close,share:share,fmt:fmt,waText:waText,waUrl:waUrl,wa:function(t){waGo(null,t);},waRefresh:waAll
   };
 })();
