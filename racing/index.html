@@ -644,6 +644,7 @@ function showOverlay(id){
 function setPlaying(on){document.body.classList.toggle('playing',on)}
 
 function startGame(){
+  if(window.PDRevive)PDRevive.arm();
   resumeAudio();reset();state='play';showOverlay(null);setPlaying(true);setEngine(true);sfx.start();updHud();
   last=performance.now();
 }
@@ -658,6 +659,7 @@ function gameOver(){
   showOverlay('over');
 }
 
+window.__pdRun=function(){if(state!=='over')return;traffic=traffic.filter(function(c){return c.y<-carH*2});crashT=0;crashRot=0;crashFlash=0;shake=0;resumeAudio();state='play';showOverlay(null);setPlaying(true);setEngine(true);last=performance.now();texts.push({x:player.x,y:playerY-carH,s:'EXTRA LIFE',life:1.2,max:1.2,c:'#ffe066'})};
 $('playBtn').addEventListener('click',startGame);
 $('againBtn').addEventListener('click',startGame);
 $('restartBtn').addEventListener('click',startGame);
@@ -725,6 +727,8 @@ reset();resize();showOverlay('start');updHud();
 requestAnimationFrame(frame);
 })();
 </script>
+<script src="../revive.js"></script>
+<script>PDRevive.init({card:'#ovOver .card',before:'#againBtn',onRevive:function(){var g=window.__pdRun;g&&g()}});</script>
 <script src="../share.js"></script>
 <script src="../fullscreen.js" defer></script>
 <script>PDShare.init({title:"Highway Rush",url:"https://promptdiya-arcade.vercel.app/racing/",text:function(){return "Maine Highway Rush mein "+PDShare.fmt(document.getElementById("oScore").textContent)+" score kiya! 🏎️ Beat karo:";}});</script>

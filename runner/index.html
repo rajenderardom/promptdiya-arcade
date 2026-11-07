@@ -1015,6 +1015,7 @@ function showOverlay(id){
 }
 var inputBlock=0,hintTimer=0;
 function startGame(){
+  if(window.PDRevive)PDRevive.arm();
   resumeAudio();musicStart();reset();state='play';showOverlay(null);sfx.start();musicMood();lastScoreTxt=lastCoinTxt='';updHud();
   inputBlock=performance.now()+180;last=performance.now();
   hintEl.textContent=isTouch?'Swipe ← → to switch · ↑ jump · ↓ roll':'←→ switch · ↑ jump · ↓ roll · P pause · M mute';
@@ -1035,6 +1036,7 @@ function gameOver(){
   showOverlay('over');musicMood();
 }
 
+window.__pdRun=function(){if(state!=='over')return;for(var i=0;i<objs.length;i++){var o=objs[i];if(o.z1>pz-2&&o.z0<pz+40)o.done=true}P.dead=false;stumbleT=0;dyingT=0;flash=0;shake=0;resumeAudio();state='play';showOverlay(null);musicMood();last=performance.now();inputBlock=performance.now()+300;toast('Extra life!')};
 $('playBtn').addEventListener('click',startGame);
 $('againBtn').addEventListener('click',startGame);
 $('restartBtn').addEventListener('click',startGame);
@@ -1110,6 +1112,8 @@ reset();resize();showOverlay('start');updHud();
 requestAnimationFrame(frame);
 })();
 </script>
+<script src="../revive.js"></script>
+<script>PDRevive.init({card:'#ovOver .card',before:'#againBtn',onRevive:function(){var g=window.__pdRun;g&&g()}});</script>
 <script src="../share.js"></script>
 <script src="../fullscreen.js" defer></script>
 <script>PDShare.init({title:"Metro Dash",url:"https://promptdiya-arcade.vercel.app/runner/",text:function(){return "Maine Metro Dash mein "+PDShare.fmt(document.getElementById("oScore").textContent)+" score kiya! 🏃 Beat karo:";}});</script>
