@@ -322,8 +322,10 @@ function gameOver(){
  $('finalScore').textContent=score;$('bestScore').textContent=best;var fsc=score,fsv=0;setTimeout(function(){var t0=performance.now(),d=Math.min(900,300+fsc*30);(function f(){var k=Math.min(1,(performance.now()-t0)/d);fsv=Math.floor(fsc*(1-Math.pow(1-k,3)));$('finalScore').textContent=fsv;if(k<1)requestAnimationFrame(f)})()},650);$('newBest').textContent=nb&&score>0?'✨ New best!':'';
  overTimer=0.65;
 }
-window.__pdRun=function(){if(state!=='over')return;pillars=pillars.filter(function(p){return p.x>diya.x+260||p.x+PW<diya.x-60});if(spawnX<diya.x+300)spawnX=diya.x+300;diya.alive=true;diya.y=VH*0.42;diya.vy=0;diya.rot=0;shake=0;flash=0;overTimer=0;state='play';showOv(null);last=performance.now();flap()};
+window.__pdDie=function(){if(state==='play')gameOver()};window.__pdState=function(){return state};window.__pdTap=function(){flap()};
+window.__pdRun=function(){if(state!=='over')return;pillars=pillars.filter(function(p){return p.x>diya.x+260||p.x+PW<diya.x-60});if(spawnX<diya.x+300)spawnX=diya.x+300;diya.alive=true;diya.y=VH*0.42;diya.vy=0;diya.rot=0;shake=0;flash=0;overTimer=0;state='ready';showOv(null);last=performance.now()};
 function flap(){
+ if(state==='ready')state='play';
  if(state!=='play')return;diya.vy=FLAP;sfx.flap();squash=1;wingKick=1;
  for(var i=0;i<8;i++)parts.push({x:diya.x-8,y:diya.y+10,vx:-60-Math.random()*90,vy:40+Math.random()*90,life:.45,max:.45,c:'#ffcf7a',r:2+Math.random()*2});
 }
@@ -363,7 +365,7 @@ function update(dt){
   blink-=dt;if(blink<-.12)blink=2+Math.random()*3;
  }
  if(state!=='paused'){layers.forEach(function(L){L.off=(L.off+sp*L.sp*dt)%L.len});stars.forEach(function(s){s.x-=sp*s.p*dt;if(s.x<0)s.x+=VW})}
- if(state==='menu'){diya.y=VH*0.42+Math.sin(t*2.4)*14;diya.rot=Math.sin(t*2.4)*.08}
+ if(state==='menu'||state==='ready'){diya.y=VH*0.42+Math.sin(t*2.4)*14;diya.rot=Math.sin(t*2.4)*.08}
  if(state==='play'){
   diya.vy+=GRAV*dt;if(diya.vy>720)diya.vy=720;diya.y+=diya.vy*dt;
   diya.rot+=((Math.max(-.45,Math.min(1.1,diya.vy/700)))-diya.rot)*Math.min(1,dt*10);
@@ -439,7 +441,7 @@ function draw(){
  for(i=0;i<parts.length;i++){var q=parts[i],qa=Math.max(0,q.life/q.max);gl(q.rgb||(q.rgb=hexRgb(q.c)),q.x,q.y,q.r*3.2,qa);cx.globalAlpha=qa;cx.fillStyle='#fff6dc';cx.fillRect(q.x-q.r*.35,q.y-q.r*.35,q.r*.7,q.r*.7)}
  for(i=0;i<rings.length;i++){var rg=rings[i],k2=1-rg.life/rg.max,ease=1-Math.pow(1-k2,3);cx.globalAlpha=rg.life/rg.max;cx.strokeStyle='rgba('+rg.c+',1)';cx.lineWidth=3*(1-k2)+.5;cx.beginPath();cx.arc(rg.x,rg.y,rg.r+ease*38,0,6.283);cx.stroke()}
  cx.globalAlpha=1;cx.globalCompositeOperation='source-over';
- drawDiya();
+ drawDiya();if(state==='ready'){cx.save();cx.font='700 22px system-ui,sans-serif';cx.textAlign='center';cx.fillStyle='#ffe9b0';cx.globalAlpha=.6+.4*Math.sin(t*5);cx.fillText('Tap to continue',VW/2,VH*0.42+70);cx.restore()}
  // popups
  cx.textAlign='center';cx.textBaseline='middle';
  popups.forEach(function(p){var mx=p.max||1,k=1-p.life/mx,sc=k<.15?.6+k/.15*.6:1.2-Math.min(.2,(k-.15)*.6);
@@ -607,7 +609,7 @@ function loop(now){
 }
 
 /* ---------- Input ---------- */
-cv.addEventListener('pointerdown',function(e){e.preventDefault();if(state==='play')flap()},{passive:false});
+cv.addEventListener('pointerdown',function(e){e.preventDefault();if(state==='play'||state==='ready')flap()},{passive:false});
 cv.addEventListener('contextmenu',function(e){e.preventDefault()});
 function stopBubble(e){e.stopPropagation()}
 ['playBtn','againBtn','resumeBtn','muteBtn','pauseBtn'].forEach(function(id){var b=$(id);b.addEventListener('pointerdown',stopBubble);b.addEventListener('touchstart',stopBubble,{passive:true})});
@@ -621,7 +623,7 @@ window.addEventListener('keydown',function(e){
  if(k===' '||k==='Spacebar'||k==='ArrowUp'||k==='w'||k==='W'||k==='Enter'){
   if(k==='Enter'&&document.activeElement&&document.activeElement.tagName==='A')return;
   e.preventDefault();if(e.repeat)return;
-  if(state==='play')flap();
+  if(state==='play'||state==='ready')flap();
   else if(state==='menu')startGame();
   else if(state==='paused')resume();
   else if(state==='over'&&overOv.classList.contains('show'))startGame();

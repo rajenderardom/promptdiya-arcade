@@ -370,7 +370,11 @@ function showOv(id){
 function bump(el){el.classList.remove('pop');void el.offsetWidth;el.classList.add('pop');}
 function pause(){if(state!=='playing')return;state='paused';if($('pauseScore'))$('pauseScore').textContent=score;showOv('pauseOv');musicMood();}
 function resume(){if(state!=='paused')return;resumeAudio();state='playing';showOv(null);last=performance.now();musicMood();}
-function beginRun(){resumeAudio();musicStart();score=0;newBest=false;parts.length=0;texts.length=0;shakeT=0;flashA=0;state='playing';showOv(null);last=performance.now();musicMood();}
+function beginRun(){if(window.PDRevive)PDRevive.arm();resumeAudio();musicStart();score=0;newBest=false;parts.length=0;texts.length=0;shakeT=0;flashA=0;state='playing';showOv(null);last=performance.now();musicMood();}
+function pdRvInit(){if(!window.PDRevive||typeof reviveGame!=='function')return;PDRevive.init({card:'#overOv .card',before:'#againBtn',onRevive:function(){if(state!=='over')return;reviveGame();state='playing';showOv(null);last=performance.now();resumeAudio();musicMood();if(typeof hud==='function')hud();}});}
+window.addEventListener('DOMContentLoaded',pdRvInit);window.__pdState=function(){return state};
+function reviveGame(){P.hp=60;P.inv=3;overWhy='';}
+window.__pdDie=function(){P.inv=0;P.shield=0;hurt(999);};
 function endRun(delay){
  if(state!=='playing')return;state='dying';saveBest();musicMood();
  setTimeout(function(){if(state!=='dying')return;state='over';
@@ -1675,6 +1679,7 @@ window.__flare={showcase:showcase,get state(){return state;},get score(){return 
 $('startBest').textContent=best;
 })();
 </script>
+<script src="../revive.js"></script>
 <script src="../share.js"></script>
 <script src="../fullscreen.js" defer></script>
 <script>PDShare.init({title:"Flare Ace",url:"https://promptdiya-arcade.vercel.app/flare-ace/",text:function(){return "I scored "+PDShare.fmt(document.getElementById("finalScore").textContent)+" in Flare Ace: Sky Strike ✈️ Can you beat the missile locks?";},wa:function(){var $=function(i){return document.getElementById(i)},c=$("clearOv");if(c&&c.classList.contains("show")){var t=$("clT").textContent.replace(/!$/,""),n=$("clS").querySelectorAll(".on").length,st=$("clS").style.display!=="none";return "Maine Flare Ace mein "+t+" kiya"+(st?" "+"⭐".repeat(n)+" ("+n+"/3 stars)":"")+", score "+PDShare.fmt($("clScore").textContent)+"!";}var m=/^(Level \d+|Endless wave \d+)/.exec($("overStats").textContent||"");return "Maine Flare Ace mein "+PDShare.fmt($("finalScore").textContent)+" score kiya"+(m?" ("+m[1]+")":"")+"! ✈️";},waAt:["#clearOv #nextBtn"]});</script>

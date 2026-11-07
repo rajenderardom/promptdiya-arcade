@@ -369,7 +369,11 @@ function showOv(id){
 function bump(el){el.classList.remove('pop');void el.offsetWidth;el.classList.add('pop');}
 function pause(){if(state!=='playing')return;state='paused';if($('pauseScore'))$('pauseScore').textContent=score;showOv('pauseOv');musicMood();}
 function resume(){if(state!=='paused')return;resumeAudio();state='playing';showOv(null);last=performance.now();musicMood();}
-function beginRun(){resumeAudio();musicStart();score=0;newBest=false;parts.length=0;texts.length=0;shakeT=0;flashA=0;state='playing';showOv(null);last=performance.now();musicMood();}
+function beginRun(){if(window.PDRevive)PDRevive.arm();resumeAudio();musicStart();score=0;newBest=false;parts.length=0;texts.length=0;shakeT=0;flashA=0;state='playing';showOv(null);last=performance.now();musicMood();}
+function pdRvInit(){if(!window.PDRevive||typeof reviveGame!=='function')return;PDRevive.init({card:'#overOv .card',before:'#againBtn',onRevive:function(){if(state!=='over')return;reviveGame();state='playing';showOv(null);last=performance.now();resumeAudio();musicMood();if(typeof hud==='function')hud();}});}
+window.addEventListener('DOMContentLoaded',pdRvInit);window.__pdState=function(){return state};
+var finBonus=0;function reviveGame(){score-=finBonus;finBonus=0;P.alive=true;P.hp=100;alive++;won=false;place=20;timeScale=1;graceT=4;var dx=P.x-zone.cx,dy=P.y-zone.cy,d=Math.sqrt(dx*dx+dy*dy),R=zone.r*0.7;if(d>R&&d>0){P.x=zone.cx+dx/d*R;P.y=zone.cy+dy/d*R;}}
+window.__pdDie=function(){graceT=0;kill(P,null);};
 function endRun(delay){
  if(state!=='playing')return;state='dying';saveBest();musicMood();
  setTimeout(function(){if(state!=='dying')return;state='over';
@@ -611,7 +615,7 @@ function kill(t,src){t.alive=false;t.hp=0;alive--;
  if(P.alive&&alive===1){place=1;won=true;timeScale=0.35;flash('255,230,150',0.5);
   popText('CHICKEN BIRYANI DINNER!',W/2,H*0.42,{size:30,life:2.2,c1:'#fff6c2',c2:'#ffb21e'});tone(523,0.2,'triangle',0.14);tone(659,0.2,'triangle',0.14,null,0.15);tone(784,0.4,'triangle',0.14,null,0.3);
   try{if(window.__onWin)window.__onWin();}catch(_){}finish(2200);}}
-function finish(delay){score+=Math.round(runT*2)+(21-place)*30+(won?1500:0);hud();endRun(delay);}
+function finish(delay){finBonus=Math.round(runT*2)+(21-place)*30+(won?1500:0);score+=finBonus;hud();endRun(delay);}
 function pickup(e){for(var i=items.length-1;i>=0;i--){var it=items[i];if(d2(e.x,e.y,it.x,it.y)>34*34)continue;var took=false,msg='';
   if(it.k==='wp'){if(it.v>e.wp){if(e.wp>0)e.res+=Math.floor(e.mag/2);e.wp=it.v;e.mag=WP[it.v].mag;e.relT=0;took=true;msg=WP[it.v].n+'!';}else{e.res+=15;took=true;msg='+15 ammo';}}
   else if(it.k==='ammo'){e.res+=it.v;took=true;msg='+'+it.v+' ammo';}
@@ -850,6 +854,7 @@ genWorld(424242);resize();bakeSprites();showOv('startOv');requestAnimationFrame(
 $('startBest').textContent=best;
 })();
 </script>
+<script src="../revive.js"></script>
 <script src="../share.js"></script>
 <script src="../fullscreen.js" defer></script>
 <script>PDShare.init({title:"Zone Royale",url:"https://promptdiya-arcade.vercel.app/zone-royale/",text:function(){return (window.__zrShare?window.__zrShare():"Zone Royale khelo!");},wa:function(){return window.__zrShare?window.__zrShare():"";}});</script>

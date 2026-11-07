@@ -298,8 +298,9 @@ function prepare(){
   dir={x:1,y:0}; queue=[]; grow=0; bonus=null; acc=0;
   placeFood();
 }
+window.__pdRun=function(){if(state!=='over')return;prepare();particles=[];shake=0;flash=0;updHud();setState('play');};window.__pdDie=function(){if(state==='play')die();};window.__pdState=function(){return state};
 function newGame(){
-  if(overTimer){clearTimeout(overTimer);overTimer=null;}
+if(window.PDRevive)PDRevive.arm();  if(overTimer){clearTimeout(overTimer);overTimer=null;}
   fitGrid(true); prepare();
   score=0; eaten=0; particles=[]; shake=0; flash=0;
   interval=LEVELS[level].base; best=getBest();
@@ -663,6 +664,8 @@ best=getBest(); updMute(); updPills(); updHud(); resize(); setState('menu');
 requestAnimationFrame(frame);
 })();
 </script>
+<script src="../revive.js"></script>
+<script>PDRevive.init({card:"#ovOver .card",before:"#btnAgain",onRevive:function(){window.__pdRun&&window.__pdRun()}});</script>
 <script src="../share.js"></script>
 <script src="../fullscreen.js" defer></script>
 <script>PDShare.init({title:"Neon Snake",url:"https://promptdiya-arcade.vercel.app/snake/",text:function(){return "Maine Neon Snake mein "+PDShare.fmt(document.getElementById("oScore").textContent)+" score kiya! 🐍 Beat karo:";}});</script>

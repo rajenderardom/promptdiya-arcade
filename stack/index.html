@@ -211,7 +211,7 @@ function showOv(id){
 /* ---------- game ---------- */
 function hueAt(i){return (hue0+i*9)%360;}
 function newGame(){
- ensureAudio();
+if(window.PDRevive)PDRevive.arm(); ensureAudio();
  stack=[];falls=[];fx=[];texts=[];parts=[];shakeT=0;flashA=0;score=0;combo=0;camY=0;newBest=false;
  hue0=Math.floor(Math.random()*360);
  stack.push({x:0,z:0,w:BASE,d:BASE,y:-BH*3,h:BH*4,hue:hueAt(0)}); // base pedestal
@@ -285,6 +285,7 @@ function place(){
  if(combo===0)sndDrop();
  spawn();
 }
+window.__pdRun=function(){if(state!=='over')return;state='playing';showOv(null);last=performance.now();spawn();};window.__pdDie=function(){if(state==='playing'){cur=null;gameOver();}};window.__pdState=function(){return state};
 function gameOver(){
  state='dying';sndOver();
  if(score>best){best=score;newBest=true;try{localStorage.setItem('pd_stack_best',String(best));}catch(e){}}
@@ -550,6 +551,8 @@ window.__stack={
 };
 })();
 </script>
+<script src="../revive.js"></script>
+<script>PDRevive.init({card:"#overOv .card",before:"#againBtn",onRevive:function(){window.__pdRun&&window.__pdRun()}});</script>
 <script src="../share.js"></script>
 <script src="../fullscreen.js" defer></script>
 <script>PDShare.init({title:"Stack Tower",url:"https://promptdiya-arcade.vercel.app/stack/",text:function(){return "Maine Stack Tower mein "+PDShare.fmt(document.getElementById("finalScore").textContent)+" blocks ka tower banaya! 🏗️ Beat karo:";}});</script>

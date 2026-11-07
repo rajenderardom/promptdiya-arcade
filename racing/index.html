@@ -659,6 +659,7 @@ function gameOver(){
   showOverlay('over');
 }
 
+window.__pdDie=function(){if(state==='play')crash()};window.__pdState=function(){return state};
 window.__pdRun=function(){if(state!=='over')return;traffic=traffic.filter(function(c){return c.y<-carH*2});crashT=0;crashRot=0;crashFlash=0;shake=0;resumeAudio();state='play';showOverlay(null);setPlaying(true);setEngine(true);last=performance.now();texts.push({x:player.x,y:playerY-carH,s:'EXTRA LIFE',life:1.2,max:1.2,c:'#ffe066'})};
 $('playBtn').addEventListener('click',startGame);
 $('againBtn').addEventListener('click',startGame);

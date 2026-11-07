@@ -426,6 +426,7 @@ function checkOver(){
  var any=S.pieces.some(function(p){return p&&canFitAny(p.def)});
  if(!any){S.playing=false;S.over=true;setTimeout(gameOver,700);}
 }
+window.__pdRun=function(){if(!S.over)return;for(var y=2;y<6;y++)for(var x=0;x<N;x++)S.grid[y][x]=0;S.over=false;S.playing=true;refill();hideOvs();};window.__pdDie=function(){if(S.playing){S.playing=false;S.over=true;gameOver();}};window.__pdState=function(){return S.playing?'playing':S.over?'over':'menu'};
 function gameOver(){
  SND.over();$("finalScore").textContent=S.score;$("finalBest").textContent=S.best;
  $("newBest").textContent=S.score>0&&S.score>S.startBest?"🏆 New best score!":"";
@@ -434,7 +435,7 @@ function gameOver(){
 function showOv(id){$(id).classList.remove("hide");document.body.classList.add("ad-on")}
 function hideOvs(){$("startOv").classList.add("hide");$("overOv").classList.add("hide");document.body.classList.remove("ad-on");setTimeout(layout,30)}
 function start(){
- audio();S.grid=emptyGrid();S.score=0;S.shown=0;S.streak=0;S.over=false;S.playing=true;S.startBest=S.best;
+if(window.PDRevive)PDRevive.arm(); audio();S.grid=emptyGrid();S.score=0;S.shown=0;S.streak=0;S.over=false;S.playing=true;S.startBest=S.best;
  $("score").textContent="0";$("streakBar").textContent="";clearing=[];parts=[];texts=[];beams=[];rings=[];lands={};
  refill();hideOvs();SND.start();
 }
@@ -491,6 +492,8 @@ window.__blockfit={state:S,
 };
 })();
 </script>
+<script src="../revive.js"></script>
+<script>PDRevive.init({card:"#overOv .card",before:"#againBtn",onRevive:function(){window.__pdRun&&window.__pdRun()}});</script>
 <script src="../share.js"></script>
 <script src="../fullscreen.js" defer></script>
 <script>PDShare.init({title:"Block Fit",url:"https://promptdiya-arcade.vercel.app/block-puzzle/",text:function(){return "Maine Block Fit mein "+PDShare.fmt(document.getElementById("finalScore").textContent)+" score kiya! 🧱 Beat karo:";}});</script>

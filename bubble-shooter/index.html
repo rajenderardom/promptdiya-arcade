@@ -338,7 +338,7 @@ function newBoard(){
   proj=null;particles=[];fallers=[];poppers=[];texts=[];glints=[];
   cur=pickCol();nxt=pickCol();
 }
-function startGame(){score=0;dispScore=0;lastSeenScore=0;level=1;newBoard();banners=[];setState('play');}
+function startGame(){if(window.PDRevive)PDRevive.arm();score=0;dispScore=0;lastSeenScore=0;level=1;newBoard();banners=[];setState('play');}
 function nextLevel(){level++;newBoard();setState('play');}
 function setState(s){
   state=s;
@@ -446,7 +446,9 @@ function checkOver(){
   }
   return false;
 }
+window.__pdRun=function(){if(state!=='over'||!window.__pdSnap)return;var sn=window.__pdSnap;for(var r=0;r<grid.length;r++)grid[r]=sn[r]||grid[r];var k=0;for(r=grid.length-1;r>=0&&k<4;r--){if(grid[r].some(function(v){return v>=0})){for(var c=0;c<grid[r].length;c++)grid[r][c]=-1;k++;}}fallers=[];setState('play');};window.__pdDie=function(){if(state==='play')gameOver();};window.__pdState=function(){return state};
 function gameOver(){
+  window.__pdSnap=grid.map(function(r){return r.slice()});
   for(var r=grid.length-1;r>=0;r--)for(var c=0;c<grid[r].length;c++)if(grid[r][c]>=0){
     fallers.push({x:cx(r,c),y:cy(r),vx:(Math.random()-.5)*R*5,vy:-R*Math.random()*3,col:grid[r][c],a:1,d:(grid.length-r)*.04});
     grid[r][c]=-1;
@@ -719,6 +721,8 @@ layout();updMute();newBoard();setState('start');
 requestAnimationFrame(frame);
 })();
 </script>
+<script src="../revive.js"></script>
+<script>PDRevive.init({card:"#overOv .card",before:"#againBtn",onRevive:function(){window.__pdRun&&window.__pdRun()}});</script>
 <script src="../share.js"></script>
 <script src="../fullscreen.js" defer></script>
 <script>PDShare.init({title:"Bubble Pop Shooter",url:"https://promptdiya-arcade.vercel.app/bubble-shooter/",text:function(){var $=function(i){return document.getElementById(i)};

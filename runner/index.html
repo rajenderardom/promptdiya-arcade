@@ -1036,6 +1036,7 @@ function gameOver(){
   showOverlay('over');musicMood();
 }
 
+window.__pdDie=function(){if(state==='play')die('train')};window.__pdState=function(){return state};
 window.__pdRun=function(){if(state!=='over')return;for(var i=0;i<objs.length;i++){var o=objs[i];if(o.z1>pz-2&&o.z0<pz+40)o.done=true}P.dead=false;stumbleT=0;dyingT=0;flash=0;shake=0;resumeAudio();state='play';showOverlay(null);musicMood();last=performance.now();inputBlock=performance.now()+300;toast('Extra life!')};
 $('playBtn').addEventListener('click',startGame);
 $('againBtn').addEventListener('click',startGame);

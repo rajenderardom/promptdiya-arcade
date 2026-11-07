@@ -368,7 +368,11 @@ function showOv(id){
 function bump(el){el.classList.remove('pop');void el.offsetWidth;el.classList.add('pop');}
 function pause(){if(state!=='playing')return;state='paused';if($('pauseScore'))$('pauseScore').textContent=score;showOv('pauseOv');musicMood();}
 function resume(){if(state!=='paused')return;resumeAudio();state='playing';showOv(null);last=performance.now();musicMood();}
-function beginRun(){resumeAudio();musicStart();score=0;newBest=false;parts.length=0;texts.length=0;shakeT=0;flashA=0;state='playing';showOv(null);last=performance.now();musicMood();}
+function beginRun(){if(window.PDRevive)PDRevive.arm();resumeAudio();musicStart();score=0;newBest=false;parts.length=0;texts.length=0;shakeT=0;flashA=0;state='playing';showOv(null);last=performance.now();musicMood();}
+function pdRvInit(){if(!window.PDRevive||typeof reviveGame!=='function')return;PDRevive.init({card:'#overOv .card',before:'#againBtn',onRevive:function(){if(state!=='over')return;reviveGame();state='playing';showOv(null);last=performance.now();resumeAudio();musicMood();if(typeof hud==='function')hud();}});}
+window.addEventListener('DOMContentLoaded',pdRvInit);window.__pdState=function(){return state};
+function reviveGame(){if(overWhy==='ammo')ammo+=8;else lives=1;hazards=[];overWhy='';}
+window.__pdDie=function(){lives=1;hitHazard({k:'kite',x:W/2,y:H/2});};
 function endRun(delay){
  if(state!=='playing')return;state='dying';saveBest();musicMood();
  setTimeout(function(){if(state!=='dying')return;state='over';
@@ -809,6 +813,7 @@ window.__patakha={get state(){return state;},get score(){return score;},get leve
 $('startBest').textContent=best;
 })();
 </script>
+<script src="../revive.js"></script>
 <script src="../share.js"></script>
 <script src="../fullscreen.js" defer></script>
 <script>PDShare.init({title:"Patakha Blast",url:"https://promptdiya-arcade.vercel.app/patakha/",text:function(){return "Maine Patakha Blast mein "+PDShare.fmt(document.getElementById("finalScore").textContent)+" score kiya – Happy Diwali! 🎆 Tum kitne patakhe phodoge?";},wa:function(){var s=PDShare.fmt(document.getElementById("finalScore").textContent),m=/level (\d+)/i.exec(document.getElementById("overStats").textContent||"");return "Maine Patakha Blast mein "+(m?"Level "+m[1]+" tak pahunch ke ":"")+s+" score kiya! 🎆";}});</script>

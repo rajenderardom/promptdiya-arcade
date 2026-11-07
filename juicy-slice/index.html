@@ -355,8 +355,9 @@ function setLevel(k){
   if(state==="start"){lives=L.lives;timeLeft=L.time;hud();}
 }
 function show(ov){[startOv,pauseOv,overOv].forEach(function(o){o.classList.toggle("show",o===ov)});document.body.classList.toggle("ad-on",!!ov);}
+window.__pdRun=function(){if(state!=='over')return;if(/time/i.test(overReason))timeLeft+=15;else if(/lives/i.test(overReason))lives=1;fruits=[];halves=[];overTimer=-1;state='play';show(null);hud();pauseBtn.textContent='❚❚';last=performance.now();};window.__pdDie=function(){if(state==='play'){lives=0;endGame('Out of lives!',0.2);}};window.__pdState=function(){return state};
 function start(){
-  initAudio();
+if(window.PDRevive)PDRevive.arm();  initAudio();
   $("hudLevel").textContent=L.name;
   score=0;lives=L.lives;timeLeft=L.time;elapsed=0;spawnT=0.5;
   fruits=[];halves=[];parts=[];texts=[];trail=[];shake=0;flash=0;overTimer=-1;
@@ -767,6 +768,8 @@ function loop(now){
 buildBG();setLevel("medium");hud();requestAnimationFrame(loop);
 })();
 </script>
+<script src="../revive.js"></script>
+<script>PDRevive.init({card:"#overOv .x-card",before:"#againBtn",onRevive:function(){window.__pdRun&&window.__pdRun()}});</script>
 <script src="../share.js"></script>
 <script src="../fullscreen.js" defer></script>
 <script>PDShare.init({title:"Juicy Slice",url:"https://promptdiya-arcade.vercel.app/juicy-slice/",text:function(){return "Maine Juicy Slice mein "+PDShare.fmt(document.getElementById("finalScore").textContent)+" score kiya! 🍉 Beat karo:";}});</script>

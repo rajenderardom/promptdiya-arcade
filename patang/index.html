@@ -369,7 +369,11 @@ function showOv(id){
 function bump(el){el.classList.remove('pop');void el.offsetWidth;el.classList.add('pop');}
 function pause(){if(state!=='playing')return;state='paused';if($('pauseScore'))$('pauseScore').textContent=score;showOv('pauseOv');musicMood();}
 function resume(){if(state!=='paused')return;resumeAudio();state='playing';showOv(null);last=performance.now();musicMood();}
-function beginRun(){resumeAudio();musicStart();score=0;newBest=false;parts.length=0;texts.length=0;shakeT=0;flashA=0;state='playing';showOv(null);last=performance.now();musicMood();}
+function beginRun(){if(window.PDRevive)PDRevive.arm();resumeAudio();musicStart();score=0;newBest=false;parts.length=0;texts.length=0;shakeT=0;flashA=0;state='playing';showOv(null);last=performance.now();musicMood();}
+function pdRvInit(){if(!window.PDRevive||typeof reviveGame!=='function')return;PDRevive.init({card:'#overOv .card',before:'#againBtn',onRevive:function(){if(state!=='over')return;reviveGame();state='playing';showOv(null);last=performance.now();resumeAudio();musicMood();if(typeof hud==='function')hud();}});}
+window.addEventListener('DOMContentLoaded',pdRvInit);window.__pdState=function(){return state};
+function reviveGame(){lives=1;}
+window.__pdDie=function(){lives=1;cutPlayer([P.x,P.y]);};
 function endRun(delay){
  if(state!=='playing')return;state='dying';saveBest();musicMood();
  setTimeout(function(){if(state!=='dying')return;state='over';
@@ -723,6 +727,7 @@ window.__patang={get state(){return state;},get score(){return score;},get level
 $('startBest').textContent=best;
 })();
 </script>
+<script src="../revive.js"></script>
 <script src="../share.js"></script>
 <script src="../fullscreen.js" defer></script>
 <script>PDShare.init({title:"Patang Fight",url:"https://promptdiya-arcade.vercel.app/patang/",text:function(){return "Maine Patang Fight mein "+PDShare.fmt(document.getElementById("finalScore").textContent)+" score kiya – Bo Kata! 🪁 Tum kitni patang kaatoge?";}});</script>
